@@ -52,8 +52,8 @@ var RoomView = component(function({player}) {
 var LinkParagraph = component(function({text}) {
   var _text = text.toJS()
   var innerContent = _text.map(function(spanText) {
-    if (Array.isArray(spanText)) return React.DOM.a({href:spanText[1]}, spanText[0])
-    else return React.DOM.span(null, spanText)
+    if (Array.isArray(spanText)) return React.DOM.a({href:spanText[1]}, spanText[0] + " ")
+    else return React.DOM.span(null, spanText + " ")
   })
   return React.DOM.p(null, innerContent)
 })
