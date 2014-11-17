@@ -1,0 +1,29 @@
+{
+  "name": "icarus",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seanhess/icarus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/seanhess/icarus/issues"
+  },
+  "homepage": "https://github.com/seanhess/icarus",
+  "dependencies": {
+    "gulp-livereload": "^2.1.1",
+    "immstruct": "^1.1.0",
+    "omniscient": "^2.0.1",
+    "react": "^0.12.0"
+  },
+  "devDependencies": {
+    "jsx-loader": "^0.12.1",
+    "webpack": "^1.4.13"
+  }
+}
