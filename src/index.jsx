@@ -52,10 +52,6 @@ var RoomView = component(function({player}) {
   var room = player.cursor('location')
   return <div>
     <LinkParagraph text={room.get('description')}/>
-    <p><button onClick={onClickMove('hall')}>Move to Hall</button></p>
-    <p><button onClick={onClickMove('engineRoom')}>Move to Engine</button></p>
-    <p><button onClick={onClickMove('crewQuarters')}>Move to Quarters</button></p>
-    <p><button onClick={onClickMove('bridge')}>Move to Bridge</button></p>
   </div>
 })
 
