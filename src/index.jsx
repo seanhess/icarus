@@ -27,17 +27,12 @@ var StoryPanel = component(function(props) {
     backgroundColor: "green"
   }
 
-  return <div style={style}>
-    Lorem ipsum dolor sit amet, consectetuer interpretaris nec at, adolescens definiebas est et. Est cu assentior consectetuer, ius ut inani saperet qualisque. Pri ei quot solum luptatum, quaerendum ullamcorper cum no. Ei falli dolor insolens sit. Duo ea illud possim sententiae, enim graeci assentior no nec. Vel verterem oportere qualisque eu, et amet impetus iracundia his.
+  return <RoomView player={player}/>
+})
 
-In eum lorem soleat partiendo, pri ea adhuc virtute evertitur. No ius minimum blandit probatus, his atqui aliquid id. Mel alterum accusam et, duo ea nisl iriure civibus. Essent volutpat pro ne. Sit in omittam moderatius, ius ei unum audire commune. Ad eos periculis accommodare, iriure appareat at sit, at vix tacimates adversarium contentiones.
-
-Duo an saepe veniam dolorum. Ius cu munere oporteat, nibh evertitur ex mel, eos primis laboramus ex. Ne wisi delenit petentium est, est an sumo forensibus. Rebum iusto assueverit ut has.
-
-Nostro facilis te has. Cu vero blandit sed, in malorum insolens vel. Brute ridens usu ei. Qui feugiat consectetuer ei, liber platonem vim ne, ne vidit ipsum pri. Ei vis timeam percipit.
-
-Te vim saepe propriae nominavi. Mel feugait signiferumque et. Mundi qualisque hendrerit et mea. Vide maiorum voluptua nam an, alii falli te quo, vim brute posidonium ad.
-  </div>
+var RoomView = component(function({player}) {
+  var room = player.get('location')
+  return <div>{room.get('description')}</div>
 })
 
 
