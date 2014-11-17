@@ -8,33 +8,43 @@ console.log("GO")
 
 var TERMINAL_WIDTH = 400
 
+
+// App is a flex box container
 var App = component(function({player}) {
 
+  var appStyle = {
+
+  }
+
+  return <div style={appStyle}>
+    <StoryPanel player={player}/>
+    <TerminalPanel />
+  </div>
+})
+
+var TerminalPanel = component(function() {
   var terminalStyle = {
     backgroundColor: "black", 
-    position: "absolute", 
-    top: 0, bottom: 0, right: 0, 
+    color: "green",
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
     width: TERMINAL_WIDTH
   }
 
-  return <div>
-    <StoryPanel player={player}/>
-    <div style={terminalStyle}>Terminal</div>
-  </div>
+  return <div style={terminalStyle}>Terminal</div>
 })
 
 var StoryPanel = component(function({player}) {
   var style = {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    bottom: 0,
-    right: 400,
-    marginRight: TERMINAL_WIDTH,
-    backgroundColor: "green"
+    backgroundColor: "green",
+    marginRight: TERMINAL_WIDTH
   }
 
-  return <RoomView player={player}/>
+  return <div style={style}>
+    <RoomView player={player}/>
+  </div>
 })
 
 var RoomView = component(function({player}) {

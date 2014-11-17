@@ -79,21 +79,3 @@ module.exports = Immutable.fromJS({
   }
 })
 
-
-//console.log("BRIDGE", bridge.toJS())
-//console.log("HALL", hall.toJS())
-//console.log("QU", crewQuarters.toJS())
-//console.log("ENG", engineRoom.toJS())
-
-
-
-
-  //connections: {
-    //hall: { id: "hall" },
-  //}
-
-  //connections: {
-    //bridge: {id: "bridge"},
-    //crew:   {id: "quarters"},
-    //engine: {id: "engines"},
-  //}
