@@ -4,25 +4,22 @@ var component = require('../lib/component')
 
 var ship = require('./ship')
 var Player = require('./player')
+var Terminal = require('./terminal/Terminal')
+
 console.log("GO")
 
 var TERMINAL_WIDTH = 400
 
-
 // App is a flex box container
-var App = component(function({player}) {
-
-  var appStyle = {
-
-  }
-
+var App = component(function({player, terminal}) {
+  var appStyle = {}
   return <div style={appStyle}>
     <StoryPanel player={player}/>
-    <TerminalPanel />
+    <TerminalPanel terminal={terminal}/>
   </div>
 })
 
-var TerminalPanel = component(function() {
+var TerminalPanel = component(function({terminal}) {
   var terminalStyle = {
     backgroundColor: "black", 
     color: "green",
@@ -33,7 +30,9 @@ var TerminalPanel = component(function() {
     width: TERMINAL_WIDTH
   }
 
-  return <div style={terminalStyle}>Terminal</div>
+  return <div style={terminalStyle}>
+    <Terminal.Main terminal={terminal}/>
+  </div>
 })
 
 var StoryPanel = component(function({player}) {
@@ -71,11 +70,15 @@ function onClickMove(room) {
 }
 
 function render() {
+  var player = Player.atom.cursor()
+  var terminal = Terminal.state.cursor()
+
   React.render( 
-    <App player={Player.atom.cursor()}/>,
+    <App terminal={terminal} player={player}/>,
     document.getElementById('main')
   )
 }
 
 render();
 Player.atom.on('swap', render);
+Terminal.state.on('swap', render);
