@@ -4,6 +4,7 @@ var commands = {
   help: help,
   status: status,
   init: init,
+  //"": nothing,
 }
 
 function command(name, f) {

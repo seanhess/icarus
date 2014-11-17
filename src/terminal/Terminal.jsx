@@ -50,9 +50,11 @@ exports.state = state
 
 function runCommand(buffer, name) {
   var command = commands[name]
-  console.log("TESTING", command)
   var result = command()
-  console.log("RESULT", result)
   // needs to operate on the buffer
-  buffer.update((list) => list.push(result))
+  buffer.update((list) => {
+    return list
+      .push("> " + name)
+      .push(result)
+  })
 }
