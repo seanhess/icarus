@@ -1,28 +1,35 @@
 var React     = require('react')
 var immstruct = require('immstruct')
-var component = require('omniscient')
+var component = require('../lib/component')
 
 var ship = require('./ship')
-var player = require('./player')
+var Player = require('./player')
 console.log("GO")
 
 var TERMINAL_WIDTH = 400
 
+var App = component(function({player}) {
 
-var App = component(function(props) {
+  var terminalStyle = {
+    backgroundColor: "black", 
+    position: "absolute", 
+    top: 0, bottom: 0, right: 0, 
+    width: TERMINAL_WIDTH
+  }
+
   return <div>
-    <StoryPanel />
-    <div style={{backgroundColor: "black", position: "absolute", top: 0, bottom: 0, right: 0, width: TERMINAL_WIDTH}}>Terminal</div>
+    <StoryPanel player={player}/>
+    <div style={terminalStyle}>Terminal</div>
   </div>
 })
 
-var StoryPanel = component(function(props) {
-
+var StoryPanel = component(function({player}) {
   var style = {
     position: "absolute",
     left: 0,
     top: 0,
     bottom: 0,
+    right: 400,
     marginRight: TERMINAL_WIDTH,
     backgroundColor: "green"
   }
@@ -31,35 +38,29 @@ var StoryPanel = component(function(props) {
 })
 
 var RoomView = component(function({player}) {
-  var room = player.get('location')
-  return <div>{room.get('description')}</div>
+  console.log("ROOM VIEW", player)
+  var room = player.cursor('location')
+  return <div>
+    <p>{room.get('description')}</p>
+    <p><button onClick={onClickMove('hall')}>Move to Hall</button></p>
+    <p><button onClick={onClickMove('engineRoom')}>Move to Engine</button></p>
+    <p><button onClick={onClickMove('crewQuarters')}>Move to Quarters</button></p>
+    <p><button onClick={onClickMove('bridge')}>Move to Bridge</button></p>
+  </div>
 })
 
-
-//var NameInput = component(function (props) {
-  //var onChange = function (e) {
-    //props.cursor.update('name', function (name) {
-      //return e.currentTarget.value;
-    //});
-  //};
-  //return React.DOM.input({ value: props.cursor.get('name'), onChange: onChange });
-//});
-
-//var Welcome = component(function (props) {
-  //var guest = props.cursor.get('guest');
-  //var name = guest.get('name') ? ", " + guest.get('name') : "";
-  //return React.DOM.p({}, props.cursor.get('greeting'), name, "!",
-                         //NameInput(guest));
-//});
-
-//var structure = immstruct({ greeting: 'Welcome', guest: { name: '' } });
+function onClickMove(room) {
+  return function() {
+    Player.moveTo(room)
+  }
+}
 
 function render() {
   React.render( 
-    App(),
+    <App player={Player.atom.cursor()}/>,
     document.getElementById('main')
   )
 }
 
 render();
-//structure.on('swap', render);
+Player.atom.on('swap', render);

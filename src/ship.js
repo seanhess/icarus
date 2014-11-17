@@ -15,25 +15,40 @@ var Immutable = require('immutable')
 
 var bridge = Immutable.fromJS({
   id: "bridge",
-  description: "Smashed control wheels are everywhere and wires hang dangerously. You see the bridge is in poor condition. [The hallway is behind you.][hall]",
+  description: [
+    "Smashed control wheels are everywhere and wires hang dangerously. You see the bridge is in poor condition.", 
+    ["The hallway is behind you","hall"],
+  ],
   connections: {},
 })
 
 var hall = Immutable.fromJS({
   id: "hall",
-  description: "Red lights flicker along a steel catwalk. Steam fills the room. [Some steps ascend to the bridge.][bridge]. [To your left a hatch opens into the crew quarters][crewQuarters]. [Behind you lies the engine room][engineRoom]",
+  description: [
+    "Red lights flicker along a steel catwalk. Steam fills the room.",
+    ["Some steps ascend to the bridge.","bridge"],
+    ["To your left a hatch opens into the crew quarters","crewQuarters"],
+    ["Behind you lies the engine room","engineRoom"],
+  ],
   connections: {},
 })
 
+
 var crewQuarters = Immutable.fromJS({
   id: "quarters",
-  description: "Cryo tanks sit like blue pulsing tombs for the dead remains of your comrades. [The door behind you opens into the hall][hall]",
+  description: [
+    "Cryo tanks sit like blue pulsing tombs for the dead remains of your comrades.",
+    ["The door behind you opens into the hall", "hall"],
+  ],
   connections: {},
 })
 
 var engineRoom = Immutable.fromJS({
   id: "engines",
-  description: "The quantum reactor spins at speeds unimaginable. It's hot in here. [There is a door behind you.][hall]",
+  description: [
+    "The quantum reactor spins at speeds unimaginable. It's hot in here.",
+    ["There is a door behind you.","hall"],
+  ],
   connections: {}
 })
 
