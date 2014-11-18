@@ -7,14 +7,15 @@ var Player = require('./player')
 var Terminal = require('./terminal/Terminal')
 var Events = require('./events/events')
 var History = require('./history')
+var Villain = require('./villain')
 
 var TERMINAL_WIDTH = 400
 
 // App is a flex box container
-var App = component(function({player, terminal, events, history}) {
+var App = component(function({player, terminal, events, history, villain}) {
   var appStyle = {}
   return <div style={appStyle}>
-    <StoryPanel player={player} events={events} history={history}/>
+    <StoryPanel player={player} events={events} history={history} villain={villain}/>
     <TerminalPanel terminal={terminal}/>
   </div>
 })
@@ -35,7 +36,7 @@ var TerminalPanel = component(function({terminal}) {
   </div>
 })
 
-var StoryPanel = component(function({player, events, history}) {
+var StoryPanel = component(function({player, events, history, villain}) {
   var style = {
     backgroundColor: "green",
     marginRight: TERMINAL_WIDTH
@@ -47,18 +48,25 @@ var StoryPanel = component(function({player, events, history}) {
 
   return <div style={style}>
     <div>{log}</div>
-    <RoomView player={player} events={events}/>
+    <PlayerView player={player} events={events} villain={villain}/>
     <button onClick={Terminal.openTerminal}>Open Terminal</button>
     <button onClick={Terminal.closeTerminal}>Close Terminal</button>
   </div>
 })
 
-var RoomView = component(function({player, events}) {
+var PlayerView = component(function({player, events, villain}) {
   var room = player.cursor('location')
+
+  var villainView = <span/>
+  if (Villain.isSeen(player)) {
+    villainView = <span>You see the bad guy</span>
+  }
+
   return <p>
     <span>{Events.renderTime(events.get('time'))}</span>
     <span> - </span>
     <LinkParagraph text={room.get('description')}/>
+    {villainView}
   </p>
 })
 
@@ -88,6 +96,7 @@ function render() {
   var terminal = Terminal.state.cursor()
   var events   = Events.state.cursor()
   var history  = History.state.cursor()
+  var villain  = Villain.state.cursor()
 
   React.render( 
     <App 
@@ -95,6 +104,7 @@ function render() {
       player={player}
       events={events}
       history={history}
+      villain={villain}
     />,
     document.getElementById('main')
   )
@@ -105,3 +115,4 @@ Player.state.on('swap', render);
 Terminal.state.on('swap', render);
 Events.state.on('swap', render);
 History.state.on('swap', render);
+Villain.state.on('swap', render);

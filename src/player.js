@@ -22,7 +22,8 @@ exports.moveTo = function(roomId) {
   History.save(Events.currentTime(), player.cursor())
 
   // it takes time... how to mark it?
-  Events.timePassed(60)
+  Events.turnPassed()
+  //Villain.takeTurn()
 
   return player.cursor().update('location', function(l) {
     return Ship.rooms.get(roomId)

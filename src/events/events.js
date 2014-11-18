@@ -2,9 +2,13 @@ var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var moment = require('moment')
 
+var START_TIME = exports.START_TIME = moment("2084-11-14T02:14Z")
+var TURN_DURATION = exports.TURN_DURATION = 60
+
 var events = immstruct({
   // roughly 2084
-  time: moment("2084-11-14T02:14Z")
+  time: START_TIME,
+  turn: 0
 })
 
 function cursor() {
@@ -13,7 +17,16 @@ function cursor() {
 
 exports.state = events
 
+exports.turnPassed = function() {
+  exports.timePassed(TURN_DURATION)
+  events.cursor('turn').update((t) => t+1)
+}
+
 exports.timePassed = function(dt) {
+  // I need to tell the villain that time passed
+  // I could use a channel here that he can subscribe to?
+  // he needs to observe me somehow
+  // channels are CONSUMED though, right?
   events.cursor('time').update((t) => t.add(dt, 's'))
 }
 
