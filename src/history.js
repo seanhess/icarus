@@ -1,3 +1,4 @@
+/* @flow */
 // stores the game story history
 // so you can render it FOREVER
 

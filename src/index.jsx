@@ -1,3 +1,4 @@
+/* @flow */
 var React     = require('react')
 var immstruct = require('immstruct')
 var component = require('../lib/component')
@@ -13,12 +14,18 @@ var TERMINAL_WIDTH = 400
 var App = component(function({terminal, game, history}) {
   var appStyle = {}
   return <div style={appStyle}>
-    <StoryPanel game={game} history={history}/>
-    <TerminalPanel terminal={terminal}/>
+    <StoryPanel 
+      game={game} 
+      history={history}
+    />
+    <TerminalPanel 
+      terminal={terminal}
+      player={game.cursor('player')}
+    />
   </div>
 })
 
-var TerminalPanel = component(function({terminal}) {
+var TerminalPanel = component(function({terminal, player}) {
   var terminalStyle = {
     backgroundColor: "black", 
     color: "green",
@@ -30,7 +37,7 @@ var TerminalPanel = component(function({terminal}) {
   }
 
   return <div style={terminalStyle}>
-    <Terminal.Main terminal={terminal}/>
+    <Terminal.Main terminal={terminal} player={player}/>
   </div>
 })
 

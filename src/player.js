@@ -1,4 +1,3 @@
-
 var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var Ship = require('./ship')
@@ -8,6 +7,7 @@ var History = require('./history')
 exports.initialState = function() {
   return Immutable.fromJS({
     location: Ship.rooms.get("crewQuarters"),
+    detail: null, // the detail you are carefully looking at
   })
 }
 
@@ -15,26 +15,28 @@ exports.turn = function(action, player) {
   return action(player)
 }
 
-// creates an action :)
 exports.moveTo = function(roomId) {
-
   return function(player) {
-    return player.update('location', function(l) {
-      return Ship.rooms.get(roomId)
-    }) 
+    return player.set('location', Ship.rooms.get(roomId))
   }
-
-  // 1. advance time
-  // 2. add clues
-  // 3. update player location
-
-   //save the old state to the history yo
-
-   //it takes time... how to mark it?
-  //Events.turnPassed()
-  //Villain.takeTurn()
-
 }
 
-// hyperlinks room: move to room
-// hyperlinks object: inspect an element
+exports.inspect = function(detail) {
+
+  // inspect: who opens the terminal?
+  // ... change, to not be isOpen, etc, but whether you have a proper terminal focused
+  // and is not disabled, etc
+  // need to render based on what happened
+  // pass/fail?
+  // IF WORKING: you can turn the knob (allowable action)
+  // IF NOT WORKING AND TOOLS: you can fix it
+  // IF NOT WORKING: nothing
+
+  // is it a substate?
+  // no, terminal open is a combination of multiple states
+
+  return function(player) {
+    return player.set('detail', detail)
+  }
+}
+

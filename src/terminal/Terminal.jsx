@@ -3,16 +3,17 @@ var component = require('../../lib/component')
 var immstruct = require('immstruct')
 var commands = require('./commands')
 
+var Ship = require('../ship')
+
 var cx = React.addons.classSet;
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var state = immstruct({
   command: "",
   buffer: [commands.init()],
-  isOpen: false,
 })
 
-var Window = component(function({buffer, command, isOpen}) {
+var Window = component(function({buffer, command, player}) {
 
   var lines = buffer.toArray().map(function(line) {
     return <div>{line}</div>
@@ -26,9 +27,11 @@ var Window = component(function({buffer, command, isOpen}) {
 
   }
 
+  var isOpen = isTerminalOpen(player)
+
   var classes = cx({
-    'terminal-open': isOpen.deref(),
-    'terminal-closed': !isOpen.deref(),
+    'terminal-open': isOpen,
+    'terminal-closed': !isOpen
   });
 
   return <div className={classes}>
@@ -56,11 +59,11 @@ var Window = component(function({buffer, command, isOpen}) {
 })
 
 
-var Main = component(function({terminal}) {
+var Main = component(function({terminal, player}) {
   return <Window 
+    player={player}
     buffer={terminal.cursor('buffer')}
     command={terminal.cursor('command')}
-    isOpen={terminal.cursor('isOpen')}
   />
 })
 
@@ -81,14 +84,13 @@ function runCommand(buffer, name) {
   })
 }
 
-
-function openTerminal() {
-  state.cursor('isOpen').update(() => true)
+function isTerminalOpen(player) {
+  var detail = player.get('detail')
+  if (!detail) return false
+  console.log("WOOT", detail.get('type'), Ship.detailIsEnabled(detail))
+  return (
+    detail.get('type') == "terminal" && 
+    Ship.detailIsEnabled(detail)
+  )
 }
 
-function closeTerminal() {
-  state.cursor('isOpen').update(() => false)
-}
-
-exports.openTerminal = openTerminal
-exports.closeTerminal = closeTerminal

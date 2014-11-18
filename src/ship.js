@@ -1,5 +1,3 @@
-
-
 var immstruct = require('immstruct')
 var Immutable = require('immutable')
 
@@ -11,8 +9,7 @@ bridge = roomAddDescription(bridge, [
   ["The hallway is behind you","hall"],
 ])
 
-bridge = roomAddObject(bridge, {name: "terminal", properties: ["broken"]})
-
+bridge = roomAddDetail(bridge, Terminal(null, [Broken()]))
 
 var hall = roomCreate("hall")
 hall = roomAddDescription(hall, [
@@ -21,6 +18,10 @@ hall = roomAddDescription(hall, [
   ["To your left a hatch opens into the crew quarters","crewQuarters"],
   ["Behind you lies the engine room","engineRoom"],
 ])
+//hall = roomAddObject(hall, {
+  //name: "some twisted metal",
+  //description: "",
+//})
 
 var crewQuarters = roomCreate("crewQuarters")
 crewQuarters = roomAddDescription(crewQuarters, [
@@ -33,6 +34,7 @@ engineRoom = roomAddDescription(engineRoom, [
   "The quantum reactor spins at speeds unimaginable. It's hot in here.",
   ["There is a door behind you.","hall"],
 ])
+engineRoom = roomAddDetail(engineRoom, Terminal(null, []))
 
 
 // Connections are circular, define them last
@@ -67,7 +69,7 @@ function roomCreate(id) {
     id: id,
     description: "",
     connections: {},
-    objects: [],
+    details: [],
   })
 }
 
@@ -75,8 +77,8 @@ function roomAddDescription(room, description) {
   return room.set('description', Immutable.fromJS(description))
 }
 
-function roomAddObject(room, object) {
-  return room.update('objects', (os) => os.push(Immutable.fromJS(object)))
+function roomAddDetail(room, detail) {
+  return room.update('details', (fs) => fs.push(Immutable.fromJS(detail)))
 }
 
 function roomAddConnection(room, toRoom, properties) {
@@ -93,10 +95,97 @@ function roomsMap(rooms) {
   }, {}))
 }
 
+// -- DETAILS -------------------------------------------------------
+// Details can be
+//  broken
+//  disabled
+//  we need a way to describe them differently depending on this stuff
+//  terminals can be unplugged
+//  data banks can be removed (find them and put them back)
+
+//  properties can be enabled or disabled
+//  they either contribute to the description or they don't
+//  change the properties and the description changes!
+
+
+// TYPES OF DETAILS
+// -- terminals
+//    pipes with blood on them
+//    tool: hydrospanner
+//    broken robot
+//    a lead pipe
+//    a knife
+//    a blaster
+//    data disks / banks / memory sticks
+//    motion sensors
+//    engine coolant valve
+//    "A terminal is glowing" -- special case!
+//    "A hyrdospanner with a cracked screen"
+
+// can you pick this thing up?
+// it depends on what it is. what happens when you click it?
+
+function Terminal(name, properties) {
+  return Detail("terminal", name, properties)
+}
+
+function Detail(type, name, properties) {
+  return Immutable.fromJS({
+    type: type, // terminal
+    name: name || type, // terminal
+    properties: properties || [] // like broken
+  })
+}
+
+// the quick name for a detail
+function detailName(detail) {
+  var adjectives = detail.get('properties').map(propertyName).toArray().join(", ")
+  return "a " + adjectives + " " + detail.get('name')
+}
+
+
+// Ok, these all MEAN something in the game
+// it's the description that changes things
+// this is all stuff you would notice at first glance
+function Broken(description) {
+  return Property("broken", description || "broken")
+}
+
+function Disabled(description) {
+  return Property("disabled", description || "disabled")
+}
+
+function Locked(description) {
+  return Property("locked", description || "locked")
+}
+
+function Property(name, description) {
+  return Immutable.fromJS({
+    name: name,
+    description: description
+  })
+}
+
+function propertyName(prop) {
+  return prop.get('name')
+}
+
+function detailIsEnabled(detail) {
+  // if properties are none of: broken, locked, disabled, etc :)
+  var badProps = detail.get('properties').filter(function(prop) {
+    var name = prop.get('name')
+    return name == "broken" || name == "disabled" || name == "locked"
+  })
+
+  return badProps.count() === 0
+}
+
 // ------------------------------------------------------------------
 
 module.exports = {
   rooms: roomsMap([bridge, hall, crewQuarters, engineRoom]),
-  roomRawText: roomRawText
+  roomRawText: roomRawText,
+  detailName: detailName,
+  detailIsEnabled: detailIsEnabled
 }
 

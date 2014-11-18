@@ -1,4 +1,3 @@
-
 var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var moment = require('moment')

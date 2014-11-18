@@ -2,7 +2,7 @@ var React     = require('react')
 var immstruct = require('immstruct')
 var component = require('../../lib/component')
 
-var ship = require('../ship')
+var Ship = require('../ship')
 var Game = require('../game')
 var Terminal = require('../terminal/Terminal')
 var Events = require('../events/events')
@@ -30,49 +30,59 @@ var PlayerView = component(function({game, makeLink}) {
   var player = game.cursor('player')
   var villain = game.cursor('villain')
   var room = player.cursor('location')
+  var detail = player.get('detail')
 
-  var villainView = <span/>
-  if (Villain.isSeen(player, villain)) {
-    villainView = <span>You see the bad guy</span>
+  if (detail) {
+    return <div>
+      <p><Time time={game.get('time')}/>
+        <span> - </span>
+        <span>FOCUS MUCH?</span>
+      </p>
+    </div>
   }
 
-  return <div>
-    <p>
-      <span>{Events.renderTime(game.get('time'))}</span>
-      <span> - </span>
-      <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
-    </p>
-    <p><Objects objects={room.cursor('objects')}/></p>
-    <p>{villainView}</p>
-  </div>
+  else {
+    return <div>
+      <p><Time time={game.get('time')}/>
+        <span> - </span>
+        <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
+      </p>
+      <p><Details details={room.cursor('details')}/></p>
+      <p><VillainFound player={player} villain={villain}/></p>
+    </div>
+  }
+
 })
 
-// need to be able to: select the terminal and have it open!
-// woah...
-
-// if termianl
-
-var Objects = component(function({objects}) {
-  var elements = objects.toArray().map(function(obj) {
+var Details = component(function({details}) {
+  var elements = details.toArray().map(function(detail) {
     return <span><a 
       href="#"
-      onClick={inspectObject(obj)}>
-      {obj.get('name')}
+      onClick={selectDetail(detail)}>
+      {Ship.detailName(detail)}
     </a></span>
   })
   if (elements.length) {
-    return <div>You see: {elements}</div>
+    return <div>You see {elements}</div>
   }
   return <span/>
 })
 
+var VillainFound = component(function({player, villain}) {
+  if (Villain.isSeen(player, villain)) {
+    return <span>You see the bad guy</span>
+  }
+  return <span/>
+})
 
-function inspectObject(object) {
+var Time = component(function({time}) {
+  return <span>{Events.renderTime(time)}</span>
+})
+
+function selectDetail(detail) {
   return function() {
-    console.log("UMM OK", object.get('name'))
-    if (object.get('name') == "terminal") {
-      Terminal.openTerminal()
-    }
+    var action = Player.inspect(detail)
+    Game.runTick(action)
   }
 }
 
