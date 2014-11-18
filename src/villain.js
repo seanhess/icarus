@@ -1,6 +1,7 @@
 
 var Immutable = require('immutable')
 var immstruct = require('immstruct')
+var dijkstra = require('./dijkstra')
 var Ship = require('./ship')
 var Events = require('./events/events')
 var History = require('./history')
@@ -9,6 +10,7 @@ var History = require('./history')
 exports.initialState = function() {
   return Immutable.Map({
     location: Ship.rooms.get("bridge"),
+    intention: Ship.rooms.get("engineRoom")
   })
 }
 
@@ -20,8 +22,11 @@ exports.turn = function(state, villain) {
 }
 
 function randomMove(villain) {
+  var currentRoom = villain.get("location").toJS()
+  var intendedRoom = villain.get("intention").toJS()
   var connections = Object.keys(villain.getIn(['location', 'connections']).toObject())
   var nextRoomId = connections[Math.floor(Math.random()*connections.length)]
+  console.log("dk", dijkstra.pathToRoom(Ship.rooms, currentRoom, intendedRoom))
   return function(l) {
     return Ship.rooms.get(nextRoomId)
   }
