@@ -17,16 +17,22 @@ exports.initialState = function() {
 exports.turn = function(state, villain) {
   // 1. calculate action based on state
   // 2. perform action
-  var move = randomMove(villain)
+  var move = moveTowardGoal(villain)
   return villain.update('location', move)
 }
 
 function randomMove(villain) {
+  var connections = Object.keys(villain.getIn(['location', 'connections']).toObject())
+  var nextRoomId = connections[Math.floor(Math.random()*connections.length)]
+  return function(l) {
+    return Ship.rooms.get(nextRoomId)
+  }
+}
+
+function moveTowardGoal(villain) {
   var currentRoom = villain.get("location").toJS()
   var intendedRoom = villain.get("intention").toJS()
-  console.log("current", currentRoom, intendedRoom)
   var nextRoomId = dijkstra.nextRoomToDestination(Ship.rooms, currentRoom, intendedRoom)
-  console.log(nextRoomId, "nextRoomId")
   return function(l) {
     return Ship.rooms.get(nextRoomId)
   }
