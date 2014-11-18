@@ -45,6 +45,7 @@ var StoryPanel = component(function({game, history}) {
   }
 
   var log = history.toArray().map(function(state) {
+    console.log("LOG", state.get('time').format("mm:ss"))
     return <PlayerView game={state} makeLink={killLink}/>
   })
 
@@ -67,6 +68,7 @@ var PlayerView = component(function({game, makeLink}) {
   }
 
   return <p>
+    <span>{game.get('turn')} - </span>
     <span>{Events.renderTime(game.get('time'))}</span>
     <span> - </span>
     <LinkParagraph text={room.get('description')} makeLink={makeLink}/>

@@ -25,7 +25,7 @@ function initialState() {
 // so now everyone can update and be happy
 function tick(playerAction, state) {
   var nextTurn = state.get('turn') + 1
-  var nextTime = state.get('time').add(TURN_DURATION*1000)
+  var nextTime = state.get('time').clone().add(TURN_DURATION*1000)
 
   var player = Player.turn(playerAction, state.get('player'))
   var villain = Villain.turn(state, state.get('villain'))
@@ -41,6 +41,8 @@ function tick(playerAction, state) {
 exports.runTick = function(playerAction) {
 
   var state = exports.state.cursor()
+
+  // this triggers a re-render
   History.save(state)
 
   state.update(function(oldState) {
