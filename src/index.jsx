@@ -5,16 +5,16 @@ var component = require('../lib/component')
 var ship = require('./ship')
 var Player = require('./player')
 var Terminal = require('./terminal/Terminal')
-
-console.log("GO")
+var Events = require('./events/events')
+var History = require('./history')
 
 var TERMINAL_WIDTH = 400
 
 // App is a flex box container
-var App = component(function({player, terminal}) {
+var App = component(function({player, terminal, events, history}) {
   var appStyle = {}
   return <div style={appStyle}>
-    <StoryPanel player={player}/>
+    <StoryPanel player={player} events={events} history={history}/>
     <TerminalPanel terminal={terminal}/>
   </div>
 })
@@ -23,7 +23,7 @@ var TerminalPanel = component(function({terminal}) {
   var terminalStyle = {
     backgroundColor: "black", 
     color: "green",
-    position: "absolute",
+    position: "fixed",
     right: 0,
     top: 0,
     bottom: 0,
@@ -35,34 +35,46 @@ var TerminalPanel = component(function({terminal}) {
   </div>
 })
 
-var StoryPanel = component(function({player}) {
+var StoryPanel = component(function({player, events, history}) {
   var style = {
     backgroundColor: "green",
     marginRight: TERMINAL_WIDTH
   }
 
+  var log = history.toArray().map(function(text) {
+    return <p>{text}</p>
+  })
+
   return <div style={style}>
-    <RoomView player={player}/>
+    <div>{log}</div>
+    <RoomView player={player} events={events}/>
     <button onClick={Terminal.openTerminal}>Open Terminal</button>
     <button onClick={Terminal.closeTerminal}>Close Terminal</button>
   </div>
 })
 
-var RoomView = component(function({player}) {
-  console.log("ROOM VIEW", player)
+var RoomView = component(function({player, events}) {
   var room = player.cursor('location')
-  return <div>
+  return <p>
+    <span>{Events.renderTime(events.get('time'))}</span>
+    <span> - </span>
     <LinkParagraph text={room.get('description')}/>
-  </div>
+  </p>
 })
+
 
 var LinkParagraph = component(function({text}) {
   var _text = text.toJS()
   var innerContent = _text.map(function(spanText) {
-    if (Array.isArray(spanText)) return React.DOM.a({onClick:onClickMove(spanText[1])}, spanText[0] + " ")
+    if (Array.isArray(spanText)) {
+      return React.DOM.a({
+        onClick: onClickMove(spanText[1]),
+        href: "#"
+      }, spanText[0] + " ")
+    }
     else return React.DOM.span(null, spanText + " ")
   })
-  return React.DOM.p(null, innerContent)
+  return React.DOM.span(null, innerContent)
 })
 
 function onClickMove(room) {
@@ -72,15 +84,24 @@ function onClickMove(room) {
 }
 
 function render() {
-  var player = Player.atom.cursor()
+  var player   = Player.state.cursor()
   var terminal = Terminal.state.cursor()
+  var events   = Events.state.cursor()
+  var history  = History.state.cursor()
 
   React.render( 
-    <App terminal={terminal} player={player}/>,
+    <App 
+      terminal={terminal} 
+      player={player}
+      events={events}
+      history={history}
+    />,
     document.getElementById('main')
   )
 }
 
 render();
-Player.atom.on('swap', render);
+Player.state.on('swap', render);
 Terminal.state.on('swap', render);
+Events.state.on('swap', render);
+History.state.on('swap', render);
