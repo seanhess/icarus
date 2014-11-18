@@ -43,6 +43,8 @@ var StoryPanel = component(function({player}) {
 
   return <div style={style}>
     <RoomView player={player}/>
+    <button onClick={Terminal.openTerminal}>Open Terminal</button>
+    <button onClick={Terminal.closeTerminal}>Close Terminal</button>
   </div>
 })
 

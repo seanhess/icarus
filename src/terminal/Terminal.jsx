@@ -1,20 +1,37 @@
-var React     = require('react')
+var React     = require('react/addons')
 var component = require('../../lib/component')
 var immstruct = require('immstruct')
 var commands = require('./commands')
 
+var cx = React.addons.classSet;
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+
 var state = immstruct({
   command: "",
   buffer: [commands.init()],
+  isOpen: false,
 })
 
-var Window = component(function({buffer, command}) {
+var Window = component(function({buffer, command, isOpen}) {
 
   var lines = buffer.toArray().map(function(line) {
     return <div>{line}</div>
   })
 
-  return <div>
+  var openStyle = {
+
+  }
+
+  var closedStyle = {
+
+  }
+
+  var classes = cx({
+    'terminal-open': isOpen.deref(),
+    'terminal-closed': !isOpen.deref(),
+  });
+
+  return <div className={classes}>
     <div>{lines}</div>
     <form onSubmit={onCommand}>
       <span>&gt;</span>
@@ -32,6 +49,10 @@ var Window = component(function({buffer, command}) {
     command.update(() => "")
     runCommand(buffer, name)
   }
+
+  function onClick(e) {
+    openTerminal()
+  }
 })
 
 
@@ -39,6 +60,7 @@ var Main = component(function({terminal}) {
   return <Window 
     buffer={terminal.cursor('buffer')}
     command={terminal.cursor('command')}
+    isOpen={terminal.cursor('isOpen')}
   />
 })
 
@@ -58,3 +80,15 @@ function runCommand(buffer, name) {
       .push(result)
   })
 }
+
+
+function openTerminal() {
+  state.cursor('isOpen').update(() => true)
+}
+
+function closeTerminal() {
+  state.cursor('isOpen').update(() => false)
+}
+
+exports.openTerminal = openTerminal
+exports.closeTerminal = closeTerminal
