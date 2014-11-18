@@ -35,7 +35,7 @@ var hall = Immutable.fromJS({
 
 
 var crewQuarters = Immutable.fromJS({
-  id: "quarters",
+  id: "crewQuarters",
   description: [
     "Cryo tanks sit like blue pulsing tombs for the dead remains of your comrades.",
     ["The door behind you opens into the hall", "hall"],
@@ -44,7 +44,7 @@ var crewQuarters = Immutable.fromJS({
 })
 
 var engineRoom = Immutable.fromJS({
-  id: "engines",
+  id: "engineRoom",
   description: [
     "The quantum reactor spins at speeds unimaginable. It's hot in here.",
     ["There is a door behind you.","hall"],
@@ -58,6 +58,13 @@ function connectRoom(room, toRoom, properties) {
     var id = toRoom.get('id')
     return cns.set(id, {id: id})
   })
+}
+
+function roomsMap(rooms) {
+  return Immutable.Map(rooms.reduce(function(rooms, room) {
+    rooms[room.get('id')] = room
+    return rooms
+  }, {}))
 }
 
 bridge = connectRoom(bridge, hall)
@@ -82,12 +89,7 @@ function roomRawText(room) {
 }
 
 module.exports = {
-  rooms: Immutable.fromJS({
-    bridge: bridge,
-    hall: hall,
-    crewQuarters: crewQuarters,
-    engineRoom: engineRoom
-  }),
+  rooms: roomsMap([bridge, hall, crewQuarters, engineRoom]),
   roomRawText: roomRawText
 }
 
