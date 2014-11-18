@@ -3,19 +3,21 @@ var immstruct = require('immstruct')
 var component = require('../lib/component')
 
 var ship = require('./ship')
-var Player = require('./player')
+var Game = require('./game')
 var Terminal = require('./terminal/Terminal')
 var Events = require('./events/events')
 var History = require('./history')
+var Player = require('./player')
 var Villain = require('./villain')
+
 
 var TERMINAL_WIDTH = 400
 
 // App is a flex box container
-var App = component(function({player, terminal, events, history, villain}) {
+var App = component(function({terminal, game, history}) {
   var appStyle = {}
   return <div style={appStyle}>
-    <StoryPanel player={player} events={events} history={history} villain={villain}/>
+    <StoryPanel game={game} history={history}/>
     <TerminalPanel terminal={terminal}/>
   </div>
 })
@@ -36,7 +38,7 @@ var TerminalPanel = component(function({terminal}) {
   </div>
 })
 
-var StoryPanel = component(function({player, events, history, villain}) {
+var StoryPanel = component(function({game, history}) {
   var style = {
     backgroundColor: "green",
     marginRight: TERMINAL_WIDTH
@@ -48,22 +50,24 @@ var StoryPanel = component(function({player, events, history, villain}) {
 
   return <div style={style}>
     <div>{log}</div>
-    <PlayerView player={player} events={events} villain={villain}/>
+    <PlayerView game={game}/>
     <button onClick={Terminal.openTerminal}>Open Terminal</button>
     <button onClick={Terminal.closeTerminal}>Close Terminal</button>
   </div>
 })
 
-var PlayerView = component(function({player, events, villain}) {
+var PlayerView = component(function({game}) {
+  var player = game.cursor('player')
+  var villain = game.cursor('villain')
   var room = player.cursor('location')
 
   var villainView = <span/>
-  if (Villain.isSeen(player)) {
+  if (Villain.isSeen(player, villain)) {
     villainView = <span>You see the bad guy</span>
   }
 
   return <p>
-    <span>{Events.renderTime(events.get('time'))}</span>
+    <span>{Events.renderTime(game.get('time'))}</span>
     <span> - </span>
     <LinkParagraph text={room.get('description')}/>
     {villainView}
@@ -87,32 +91,27 @@ var LinkParagraph = component(function({text}) {
 
 function onClickMove(room) {
   return function() {
-    Player.moveTo(room)
+    var action = Player.moveTo(room)
+    Game.runTick(action)
   }
 }
 
 function render() {
-  var player   = Player.state.cursor()
+  var game     = Game.state.cursor()
   var terminal = Terminal.state.cursor()
-  var events   = Events.state.cursor()
-  var history  = History.state.cursor()
-  var villain  = Villain.state.cursor()
+  var history = History.state.cursor()
 
   React.render( 
     <App 
       terminal={terminal} 
-      player={player}
-      events={events}
+      game={game}
       history={history}
-      villain={villain}
     />,
     document.getElementById('main')
   )
 }
 
 render();
-Player.state.on('swap', render);
 Terminal.state.on('swap', render);
-Events.state.on('swap', render);
+Game.state.on('swap', render);
 History.state.on('swap', render);
-Villain.state.on('swap', render);
