@@ -7,6 +7,11 @@ function pathToRoom(roomsMap, fromRoom, toRoom) {
     return shortestPath(rooms, fromRoom.id, toRoom.id)
 }
 
+function nextRoomToDestination(roomsMap, fromRoom, toRoom) {
+    var path = pathToRoom(roomsMap, fromRoom, toRoom)
+    return (path.length > 1) ? path[path.length - 2] : path[0]
+}
+
 function roomsGraph(roomsMap) {
     var rooms = roomsMap.toJS()
     return _.mapValues(rooms, function(room) {
@@ -82,6 +87,7 @@ function shortestPath(_graph, pointAId, pointBId) {
 }
 
 function formatPath(visiteds, finalPointId, firstPointId) {
+    console.log("visiteds", visiteds)
     var path = [firstPointId]
     var last
     while (true) {
@@ -89,9 +95,11 @@ function formatPath(visiteds, finalPointId, firstPointId) {
         if (last == finalPointId) break
         else path.push(visiteds[last])
     }
+    console.log("path", path)
     return path
 }
 
 module.exports = {
     pathToRoom: pathToRoom,
+    nextRoomToDestination: nextRoomToDestination,
 }

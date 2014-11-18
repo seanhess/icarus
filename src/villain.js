@@ -24,9 +24,9 @@ exports.turn = function(state, villain) {
 function randomMove(villain) {
   var currentRoom = villain.get("location").toJS()
   var intendedRoom = villain.get("intention").toJS()
-  var connections = Object.keys(villain.getIn(['location', 'connections']).toObject())
-  var nextRoomId = connections[Math.floor(Math.random()*connections.length)]
-  console.log("dk", dijkstra.pathToRoom(Ship.rooms, currentRoom, intendedRoom))
+  console.log("current", currentRoom, intendedRoom)
+  var nextRoomId = dijkstra.nextRoomToDestination(Ship.rooms, currentRoom, intendedRoom)
+  console.log(nextRoomId, "nextRoomId")
   return function(l) {
     return Ship.rooms.get(nextRoomId)
   }
