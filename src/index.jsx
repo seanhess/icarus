@@ -5,16 +5,15 @@ var component = require('../lib/component')
 var ship = require('./ship')
 var Player = require('./player')
 var Terminal = require('./terminal/Terminal')
-
-console.log("GO")
+var Events = require('./events/events')
 
 var TERMINAL_WIDTH = 400
 
 // App is a flex box container
-var App = component(function({player, terminal}) {
+var App = component(function({player, terminal, events}) {
   var appStyle = {}
   return <div style={appStyle}>
-    <StoryPanel player={player}/>
+    <StoryPanel player={player} events={events}/>
     <TerminalPanel terminal={terminal}/>
   </div>
 })
@@ -35,24 +34,26 @@ var TerminalPanel = component(function({terminal}) {
   </div>
 })
 
-var StoryPanel = component(function({player}) {
+var StoryPanel = component(function({player, events}) {
   var style = {
     backgroundColor: "green",
     marginRight: TERMINAL_WIDTH
   }
 
   return <div style={style}>
-    <RoomView player={player}/>
+    <RoomView player={player} events={events}/>
   </div>
 })
 
-var RoomView = component(function({player}) {
-  console.log("ROOM VIEW", player)
+var RoomView = component(function({player, events}) {
   var room = player.cursor('location')
   return <div>
+    <span>{Events.renderTime(events.get('time'))}</span>
+    <span> - </span>
     <LinkParagraph text={room.get('description')}/>
   </div>
 })
+
 
 var LinkParagraph = component(function({text}) {
   var _text = text.toJS()
@@ -60,7 +61,7 @@ var LinkParagraph = component(function({text}) {
     if (Array.isArray(spanText)) return React.DOM.a({onClick:onClickMove(spanText[1])}, spanText[0] + " ")
     else return React.DOM.span(null, spanText + " ")
   })
-  return React.DOM.p(null, innerContent)
+  return React.DOM.span(null, innerContent)
 })
 
 function onClickMove(room) {
@@ -70,15 +71,21 @@ function onClickMove(room) {
 }
 
 function render() {
-  var player = Player.atom.cursor()
+  var player   = Player.state.cursor()
   var terminal = Terminal.state.cursor()
+  var events   = Events.state.cursor()
 
   React.render( 
-    <App terminal={terminal} player={player}/>,
+    <App 
+      terminal={terminal} 
+      player={player}
+      events={events}
+    />,
     document.getElementById('main')
   )
 }
 
 render();
-Player.atom.on('swap', render);
+Player.state.on('swap', render);
 Terminal.state.on('swap', render);
+Events.state.on('swap', render);
