@@ -70,12 +70,24 @@ crewQuarters = connectRoom(crewQuarters, hall)
 
 engineRoom = connectRoom(engineRoom, hall)
 
-module.exports = Immutable.fromJS({
-  rooms: {
+function roomRawText(room) {
+  return room.get('description').toJS().map(function(line) {
+    if (Array.isArray(line)) {
+      return line[0]
+    }
+    else {
+      return line
+    }
+  }).join(" ")
+}
+
+module.exports = {
+  rooms: Immutable.fromJS({
     bridge: bridge,
     hall: hall,
     crewQuarters: crewQuarters,
     engineRoom: engineRoom
-  }
-})
+  }),
+  roomRawText: roomRawText
+}
 

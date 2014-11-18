@@ -21,6 +21,10 @@ exports.renderTime = function(time) {
   return time.format("ddd YYYY/MM/DD HH:mm:ss")
 }
 
+exports.currentTime = function() {
+  return events.cursor().get('time')
+}
+
 // things that happen over time, that you might notice
 // the parts that you would notice
 
