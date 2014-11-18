@@ -2,6 +2,8 @@ var React     = require('react')
 var immstruct = require('immstruct')
 var component = require('../lib/component')
 
+var dijkstra = require('./dijkstra')
+
 var ship = require('./ship')
 var Player = require('./player')
 var Terminal = require('./terminal/Terminal')
