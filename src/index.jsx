@@ -44,19 +44,19 @@ var StoryPanel = component(function({game, history}) {
     marginRight: TERMINAL_WIDTH
   }
 
-  var log = history.toArray().map(function(text) {
-    return <p>{text}</p>
+  var log = history.toArray().map(function(state) {
+    return <PlayerView game={state} makeLink={killLink}/>
   })
 
   return <div style={style}>
     <div>{log}</div>
-    <PlayerView game={game}/>
+    <PlayerView game={game} makeLink={makeLinkMove}/>
     <button onClick={Terminal.openTerminal}>Open Terminal</button>
     <button onClick={Terminal.closeTerminal}>Close Terminal</button>
   </div>
 })
 
-var PlayerView = component(function({game}) {
+var PlayerView = component(function({game, makeLink}) {
   var player = game.cursor('player')
   var villain = game.cursor('villain')
   var room = player.cursor('location')
@@ -69,25 +69,36 @@ var PlayerView = component(function({game}) {
   return <p>
     <span>{Events.renderTime(game.get('time'))}</span>
     <span> - </span>
-    <LinkParagraph text={room.get('description')}/>
+    <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
     {villainView}
   </p>
 })
 
+// store the old STATE in history
 
-var LinkParagraph = component(function({text}) {
+var LinkParagraph = component(function({text, makeLink}) {
   var _text = text.toJS()
   var innerContent = _text.map(function(spanText) {
     if (Array.isArray(spanText)) {
-      return React.DOM.a({
-        onClick: onClickMove(spanText[1]),
-        href: "#"
-      }, spanText[0] + " ")
+      var href = spanText[1]
+      var text = spanText[0]
+      return React.DOM.a(makeLink(href), text + " ")
     }
     else return React.DOM.span(null, spanText + " ")
   })
   return React.DOM.span(null, innerContent)
 })
+
+function makeLinkMove(href) {
+  return {
+    onClick: onClickMove(href),
+    href: "#"
+  }
+}
+
+function killLink() {
+  return {}
+}
 
 function onClickMove(room) {
   return function() {

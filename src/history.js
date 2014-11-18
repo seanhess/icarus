@@ -12,11 +12,9 @@ var history = immstruct([])
 
 exports.state = history
 
-exports.save = function(time, player) {
+exports.save = function(state) {
   history.cursor().update(function(hs) {
-    var timeText = Events.renderTime(time)
-    var roomText = Ship.roomRawText(player.get('location'))
-    return hs.push(timeText + " - " + roomText)
+    return hs.push(state)
   })
 }
 

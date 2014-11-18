@@ -41,8 +41,7 @@ function tick(playerAction, state) {
 exports.runTick = function(playerAction) {
 
   var state = exports.state.cursor()
-
-  History.save(state.get('time'), state.get('player'))
+  History.save(state)
 
   state.update(function(oldState) {
     return tick(playerAction, oldState)

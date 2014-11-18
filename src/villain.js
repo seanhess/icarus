@@ -20,10 +20,8 @@ exports.turn = function(state, villain) {
 }
 
 function randomMove(villain) {
-  console.log("... ", villain.toJS())
   var connections = Object.keys(villain.getIn(['location', 'connections']).toObject())
   var nextRoomId = connections[Math.floor(Math.random()*connections.length)]
-  console.log("RANDOM MOVE", villain.getIn(['location', 'id']), '->', nextRoomId)
   return function(l) {
     return Ship.rooms.get(nextRoomId)
   }
