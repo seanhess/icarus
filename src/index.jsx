@@ -1,6 +1,7 @@
 var React     = require('react')
 var immstruct = require('immstruct')
 var component = require('../lib/component')
+var {zip, flatten} = require('lodash')
 
 var dijkstra = require('./dijkstra')
 
@@ -69,13 +70,15 @@ var PlayerView = component(function({game, makeLink}) {
     villainView = <span>You see the bad guy</span>
   }
 
-  return <p>
-    <span>{game.get('turn')} - </span>
-    <span>{Events.renderTime(game.get('time'))}</span>
-    <span> - </span>
-    <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
-    {villainView}
-  </p>
+  //<span>{game.get('turn')} - </span>
+  return <div>
+    <p>
+      <span>{Events.renderTime(game.get('time'))}</span>
+      <span> - </span>
+      <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
+    </p>
+    <p>{villainView}</p>
+  </div>
 })
 
 // store the old STATE in history
@@ -86,11 +89,14 @@ var LinkParagraph = component(function({text, makeLink}) {
     if (Array.isArray(spanText)) {
       var href = spanText[1]
       var text = spanText[0]
-      return React.DOM.a(makeLink(href), text + " ")
+      return React.DOM.a(makeLink(href), text)
     }
-    else return React.DOM.span(null, spanText + " ")
+    else return React.DOM.span(null, spanText)
+  }).map(function(el) {
+    return [el, " "]
   })
-  return React.DOM.span(null, innerContent)
+  var flat = flatten(innerContent)
+  return React.DOM.span(null, flat)
 })
 
 function makeLinkMove(href) {

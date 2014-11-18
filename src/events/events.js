@@ -31,7 +31,8 @@ exports.timePassed = function(dt) {
 }
 
 exports.renderTime = function(time) {
-  return time.format("ddd YYYY/MM/DD HH:mm:ss")
+  return time.format("HH:mm")
+  //return time.format("ddd YYYY/MM/DD HH:mm:ss")
 }
 
 exports.currentTime = function() {
