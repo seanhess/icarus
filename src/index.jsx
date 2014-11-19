@@ -21,11 +21,12 @@ var App = component(function({terminal, game, history}) {
     <TerminalPanel 
       terminal={terminal}
       player={game.cursor('player')}
+      game={game}
     />
   </div>
 })
 
-var TerminalPanel = component(function({terminal, player}) {
+var TerminalPanel = component(function({terminal, player, game}) {
   var terminalStyle = {
     backgroundColor: "black", 
     color: "green",
@@ -37,7 +38,7 @@ var TerminalPanel = component(function({terminal, player}) {
   }
 
   return <div style={terminalStyle}>
-    <Terminal.Main terminal={terminal} player={player}/>
+    <Terminal.Main terminal={terminal} player={player} game={game}/>
   </div>
 })
 
@@ -47,9 +48,9 @@ var StoryPanel = component(function({game, history}) {
     marginRight: TERMINAL_WIDTH
   }
 
+    //<Debug game={game}/>
   return <div style={style}>
     <Story.Main game={game} history={history}/>
-    <Debug game={game}/>
   </div>
 })
 

@@ -4,6 +4,7 @@ var immstruct = require('immstruct')
 var commands = require('./commands')
 
 var Ship = require('../ship')
+var Player = require('../player')
 
 var cx = React.addons.classSet;
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
@@ -27,7 +28,7 @@ var Window = component(function({buffer, command, player, game}) {
 
   }
 
-  var isOpen = isTerminalOpen(player)
+  var isOpen = isTerminalOpen(Player.playerDetail(game, player))
 
   var classes = cx({
     'terminal-open': isOpen,
@@ -59,11 +60,12 @@ var Window = component(function({buffer, command, player, game}) {
 })
 
 
-var Main = component(function({terminal, player}) {
+var Main = component(function({terminal, player, game}) {
   return <Window 
     player={player}
     buffer={terminal.cursor('buffer')}
     command={terminal.cursor('command')}
+    game={game}
   />
 })
 

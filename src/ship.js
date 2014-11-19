@@ -205,6 +205,10 @@ function detailIsEnabled(detail) {
   return badProps.count() === 0
 }
 
+function detailIsBroken(detail) {
+  return detail.get('properties').filter((p) => p.get('name') == "broken").count() > 0
+}
+
  //given a detail, provide
 //function focusOptions(detail) {
   //return ["Look Around"]
@@ -220,6 +224,7 @@ exports.detailIsEnabled = detailIsEnabled
 exports.detailIndex = detailIndex
 exports.Broken = Broken
 exports.detailById = detailById
+exports.detailIsBroken = detailIsBroken
 
 // ------------------------------------------------------------------
 

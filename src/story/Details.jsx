@@ -30,6 +30,9 @@ var Focused = component(function({time, detail}) {
   // fix the terminal = if broken
   // enable the terminal = if disabled
 
+  var showBreak = showStyle(Ship.detailIsEnabled(detail))
+  var showFix = showStyle(Ship.detailIsBroken(detail))
+
   return <div>
     <p><Time time={time}/>
       <span> - </span>
@@ -38,8 +41,8 @@ var Focused = component(function({time, detail}) {
 
     <p>
       <button onClick={runTick(Player.lookAround())}>Look Around</button>
-      <button onClick={runTick(Player.detailBreak())}>Break it</button>
-      <button onClick={runTick(Player.detailFix())}>Fix it</button>
+      <button style={showBreak} onClick={runTick(Player.detailBreak())}>Break it</button>
+      <button style={showFix} onClick={runTick(Player.detailFix())}>Fix it</button>
     </p>
   </div>
 })
@@ -52,3 +55,9 @@ function runTick(action) {
 
 exports.Main = Details
 exports.Focused = Focused
+
+function showStyle(bool) {
+  return {
+    display: (bool) ? 'inline' : 'none'
+  }
+}
