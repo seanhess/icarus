@@ -1,18 +1,20 @@
 var React     = require('react/addons')
 var component = require('../../lib/component')
 var immstruct = require('immstruct')
-var commands = require('./commands')
+var exec = require('./exec')
+var mainProgram = require('./programs/index').main
 
 var cx = React.addons.classSet;
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var state = immstruct({
   command: "",
-  buffer: [commands.init()],
+  buffer: [exec.init()],
   isOpen: false,
+  program: mainProgram
 })
 
-var Window = component(function({buffer, command, isOpen}) {
+var Window = component(function({program, buffer, command, isOpen}) {
 
   var lines = buffer.toArray().map(function(line) {
     return <div>{line}</div>
@@ -47,7 +49,7 @@ var Window = component(function({buffer, command, isOpen}) {
     e.preventDefault()
     var name = command.deref()
     command.update(() => "")
-    runCommand(buffer, name)
+    runCommand(program, buffer, name)
   }
 
   function onClick(e) {
@@ -58,6 +60,7 @@ var Window = component(function({buffer, command, isOpen}) {
 
 var Main = component(function({terminal}) {
   return <Window 
+    program={terminal.cursor('program')}
     buffer={terminal.cursor('buffer')}
     command={terminal.cursor('command')}
     isOpen={terminal.cursor('isOpen')}
@@ -70,9 +73,8 @@ exports.state = state
 
 
 
-function runCommand(buffer, name) {
-  var command = commands[name]
-  var result = command()
+function runCommand(program, buffer, name) {
+  var result = exec[name](program)
   // needs to operate on the buffer
   buffer.update((list) => {
     return list

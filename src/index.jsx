@@ -7,7 +7,7 @@ var Terminal = require('./terminal/Terminal')
 var History = require('./history')
 var Story = require('./story/Story')
 
-var TERMINAL_WIDTH = 400
+var TERMINAL_WIDTH = 500
 
 // App is a flex box container
 var App = component(function({terminal, game, history}) {
@@ -20,6 +20,7 @@ var App = component(function({terminal, game, history}) {
 
 var TerminalPanel = component(function({terminal}) {
   var terminalStyle = {
+    fontFamily: "monospace",
     backgroundColor: "black", 
     color: "green",
     position: "fixed",
@@ -33,7 +34,6 @@ var TerminalPanel = component(function({terminal}) {
     <Terminal.Main terminal={terminal}/>
   </div>
 })
-
 var StoryPanel = component(function({game, history}) {
   var style = {
     backgroundColor: "green",
