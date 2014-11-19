@@ -14,11 +14,11 @@ var App = component(function({terminal, game, history}) {
   var appStyle = {}
   return <div style={appStyle}>
     <StoryPanel game={game} history={history}/>
-    <TerminalPanel terminal={terminal}/>
+    <TerminalPanel game={game} terminal={terminal}/>
   </div>
 })
 
-var TerminalPanel = component(function({terminal}) {
+var TerminalPanel = component(function({terminal, game}) {
   var terminalStyle = {
     fontFamily: "monospace",
     backgroundColor: "black", 
@@ -31,7 +31,7 @@ var TerminalPanel = component(function({terminal}) {
   }
 
   return <div style={terminalStyle}>
-    <Terminal.Main terminal={terminal}/>
+    <Terminal.Main terminal={terminal} game={game}/>
   </div>
 })
 var StoryPanel = component(function({game, history}) {

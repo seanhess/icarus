@@ -1,6 +1,8 @@
 var React     = require('react/addons')
 var component = require('../../lib/component')
 var immstruct = require('immstruct')
+var _         = require('lodash')
+
 var exec = require('./exec')
 var mainProgram = require('./programs/index').main
 
@@ -13,8 +15,9 @@ var state = immstruct({
   isOpen: false,
   program: mainProgram
 })
+// program: name, available commands
 
-var Window = component(function({program, buffer, command, isOpen}) {
+var Window = component(function({game, terminal, program, buffer, command, isOpen}) {
 
   var lines = buffer.toArray().map(function(line) {
     return <div>{line}</div>
@@ -51,7 +54,7 @@ var Window = component(function({program, buffer, command, isOpen}) {
     e.preventDefault()
     var name = command.deref()
     command.update(() => "")
-    runCommand(state, buffer, name)
+    runCommand(terminal, game, name, null)
   }
 
   function onClick(e) {
@@ -60,8 +63,10 @@ var Window = component(function({program, buffer, command, isOpen}) {
 })
 
 
-var Main = component(function({terminal}) {
+var Main = component(function({terminal, game}) {
   return <Window 
+    game={game}
+    terminal={terminal}
     program={terminal.cursor('program')}
     buffer={terminal.cursor('buffer')}
     command={terminal.cursor('command')}
@@ -75,21 +80,27 @@ exports.state = state
 
 
 
-function runCommand(state, buffer, name) {
-  var progName = state.cursor("program").get("name")
-  var prog = state.cursor().toJS()
-  var result = exec[name](state)
-  console.log("progName", progName, prog)
-  buffer.update((list) => {
-    return list
-      .push(progName+ "> " + name)
-      .push(result)
-  })
+function runCommand(terminalState, gameState, commandText) {
+  var inputs = commandText.split(" ")
+  var command = _.first(inputs)
+  var args = _.rest(inputs)
+  var currentProgramName = terminalState.getIn(['program', 'name'])
+
+  var {newTerminalState, newGameState, outputText} = exec(terminalState.deref(), "gameState.deref()", command, args)
+  
+  terminalState.update(() => updateBuffer(newTerminalState, currentProgramName, commandText, outputText))  
+
+  function updateBuffer(terminalState, programName, commandText, outputText) {
+    return terminalState.updateIn(['buffer'], (buff) => {
+      return buff
+        .push(programName+"> " + commandText)
+        .push(outputText)
+    })
+  }
 }
 
 
 function openTerminal() {
-  runCommand(state, state.cursor('buffer'), "init")
   state.cursor('isOpen').update(() => true)
 }
 

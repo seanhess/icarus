@@ -10,6 +10,14 @@ var commands = {
   //"": nothing,
 }
 
+function exec(terminalState, gameState, commandName, args) {
+  return {
+    newTerminalState: terminalState,
+    newGameState: gameState,
+    outputText: "asdf" + commandName
+  }
+}
+
 function command(name, f) {
   f.name = name
   return f
@@ -29,7 +37,7 @@ function status() {
 }
 
 function init(state) {
-  return load(state, programs.main)
+  return programs.main // load(state, programs.main)
 }
 
 function mail(state) {
@@ -63,5 +71,5 @@ function currentProgram(state) {
   return state.cursor('program').toJS()
 }
 
-module.exports = commands
+module.exports = exec
 
