@@ -12,11 +12,13 @@ exports.initialState = function() {
   })
 }
 
-exports.turn = function(state, villain) {
+exports.turn = function(state) {
   // 1. calculate action based on state
   // 2. perform action
-  var move = moveTowardGoal(villain)
-  return villain.update('location', move)
+  return state.update('villain', function(villain) {
+    var move = moveTowardGoal(villain)
+    return villain.update('location', move)
+  })
 }
 
 function randomMove(villain) {

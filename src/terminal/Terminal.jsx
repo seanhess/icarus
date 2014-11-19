@@ -13,7 +13,7 @@ var state = immstruct({
   buffer: [commands.init()],
 })
 
-var Window = component(function({buffer, command, player}) {
+var Window = component(function({buffer, command, player, game}) {
 
   var lines = buffer.toArray().map(function(line) {
     return <div>{line}</div>
@@ -84,10 +84,8 @@ function runCommand(buffer, name) {
   })
 }
 
-function isTerminalOpen(player) {
-  var detail = player.get('detail')
+function isTerminalOpen(detail) {
   if (!detail) return false
-  console.log("WOOT", detail.get('type'), Ship.detailIsEnabled(detail))
   return (
     detail.get('type') == "terminal" && 
     Ship.detailIsEnabled(detail)

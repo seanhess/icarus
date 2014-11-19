@@ -18,6 +18,7 @@ function initialState() {
     time: START_TIME,
     player: Player.initialState(),
     villain: Villain.initialState(),
+    rooms: Ship.rooms,
   })
 }
 
@@ -26,14 +27,13 @@ function tick(playerAction, state) {
   var nextTurn = state.get('turn') + 1
   var nextTime = state.get('time').clone().add(TURN_DURATION*1000)
 
-  var player = Player.turn(playerAction, state.get('player'))
-  var villain = Villain.turn(state, state.get('villain'))
+  var newState = state
+    .update(playerAction)
+    .update(Villain.turn)
 
-  return Immutable.Map({
+  return newState.merge({
     turn: nextTurn,
     time: nextTime,
-    villain: villain,
-    player: player,
   })
 }
 
@@ -41,13 +41,11 @@ exports.runTick = function(playerAction) {
 
   var state = exports.state.cursor()
 
-  // this triggers a re-render
   History.save(state)
 
   state.update(function(oldState) {
     return tick(playerAction, oldState)
   })
-
 }
 
 exports.state = immstruct(initialState())

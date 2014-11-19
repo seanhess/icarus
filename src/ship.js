@@ -1,5 +1,6 @@
 var immstruct = require('immstruct')
 var Immutable = require('immutable')
+var cuid = require('cuid')
 
 
 // -- INITIAL ROOMS -------------------------------------------
@@ -48,7 +49,7 @@ crewQuarters = roomAddConnection(crewQuarters, hall)
 
 engineRoom = roomAddConnection(engineRoom, hall)
 
-// --------------------------------------------------------------
+// -- ROOMS ------------------------------------------------------
 
 function roomRawText(room) {
   return room.get('description').toJS().map(function(line) {
@@ -59,6 +60,10 @@ function roomRawText(room) {
       return line
     }
   }).join(" ")
+}
+
+exports.roomById = function(state, id) {
+  return state.getIn(["rooms", id])
 }
 
 
@@ -77,8 +82,9 @@ function roomAddDescription(room, description) {
   return room.set('description', Immutable.fromJS(description))
 }
 
-function roomAddDetail(room, detail) {
-  return room.update('details', (fs) => fs.push(Immutable.fromJS(detail)))
+function roomAddDetail(room, obj) {
+  var detail = Immutable.fromJS(obj).set('id', cuid())
+  return room.update('details', (fs) => fs.push(detail))
 }
 
 function roomAddConnection(room, toRoom, properties) {
@@ -143,6 +149,24 @@ function detailName(detail) {
   return "a " + adjectives + " " + detail.get('name')
 }
 
+function detailEquals(d1, d2) {
+  return d1.get('id') == d2.get('id')
+}
+
+function detailIndex(details, detail) {
+  var index = details.findIndex(function(d) {
+    return detailEquals(d, detail)
+  })
+  if (index < 0) throw new Error("Could not find detail: ", currentDetail)
+  return index
+}
+
+function detailById(room, detailId) {
+  return room.get('details').find(function(d) {
+    return d.get('id') == detailId
+  })
+}
+
 
 // Ok, these all MEAN something in the game
 // it's the description that changes things
@@ -180,12 +204,23 @@ function detailIsEnabled(detail) {
   return badProps.count() === 0
 }
 
+ //given a detail, provide
+//function focusOptions(detail) {
+  //return ["Look Around"]
+//}
+
 // ------------------------------------------------------------------
 
-module.exports = {
-  rooms: roomsMap([bridge, hall, crewQuarters, engineRoom]),
-  roomRawText: roomRawText,
-  detailName: detailName,
-  detailIsEnabled: detailIsEnabled
-}
+
+exports.rooms = roomsMap([bridge, hall, crewQuarters, engineRoom]),
+exports.roomRawText = roomRawText
+exports.detailName = detailName
+exports.detailIsEnabled = detailIsEnabled
+exports.detailIndex = detailIndex
+exports.Broken = Broken
+exports.detailById = detailById
+
+// ------------------------------------------------------------------
+
+
 

@@ -49,6 +49,18 @@ var StoryPanel = component(function({game, history}) {
 
   return <div style={style}>
     <Story.Main game={game} history={history}/>
+    <Debug game={game}/>
+  </div>
+})
+
+var Debug = component(function({game}) {
+  return <div>
+    <h3>Player</h3>
+    <p><pre><code>{JSON.stringify(game.get('player').toJS(), null, "  ")}</code></pre></p>
+    <h3>Rooms</h3>
+    <p><pre><code>{JSON.stringify(game.get('rooms').toJS(), null, "  ")}</code></pre></p>
+    <h3>Villain</h3>
+    <p><pre><code>{JSON.stringify(game.get('villain').toJS(), null, "  ")}</code></pre></p>
   </div>
 })
 
@@ -70,5 +82,5 @@ function render() {
 
 render();
 Terminal.state.on('swap', render);
-Game.state.on('swap', render);
+Game.state.on('swap',render);
 History.state.on('swap', render);
