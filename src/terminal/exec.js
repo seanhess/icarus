@@ -5,6 +5,8 @@ var commands = {
   status: status,
   init: init,
   mail: mail,
+  main: main,
+  quit: quit,
   //"": nothing,
 }
 
@@ -17,21 +19,29 @@ function commandName(c) {
   return c.name
 }
 
-function help(program) {
-  console.log("help called", program.toJS())
-  return "Available commands: " + _.keys(program.toJS().commands)
+function help(state) {
+  console.log(availablePrograms())
+  return "Available commands: " + _.keys(availablePrograms().commands)
 }
 
 function status() {
   return "Systems normal"
 }
 
-function init() {
-  return "Welcome to Icarus 2.31.3 - Type 'help' for a list of available commands"
+function init(state) {
+  return load(state, programs.main)
 }
 
-function mail() {
-  return programs.load("mail")
+function mail(state) {
+  return load(state, programs.mail)
+}
+
+function main(state) {
+  return load(state, programs.main)
+}
+
+function quit(state) {
+  return load(state, programs.main)
 }
 
 ////////////////////////////
@@ -39,8 +49,9 @@ function mail() {
 ////////////////////////////
 
 
-function loadProgram(state, program) {
-  return state.cursor('currentProgram').update(() => program)
+function load(state, program) {
+  state.cursor("program").update(function() {return program})
+  return program.loadText
 }
 
 function availablePrograms() {  //eventually this will take state into consideration
@@ -49,7 +60,7 @@ function availablePrograms() {  //eventually this will take state into considera
 
 
 function currentProgram(state) {
-  return state.get('currentProgram')
+  return state.cursor('program').toJS()
 }
 
 module.exports = commands

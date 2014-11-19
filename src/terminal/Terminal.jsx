@@ -9,7 +9,7 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var state = immstruct({
   command: "",
-  buffer: [exec.init()],
+  buffer: [],
   isOpen: false,
   program: mainProgram
 })
@@ -19,6 +19,8 @@ var Window = component(function({program, buffer, command, isOpen}) {
   var lines = buffer.toArray().map(function(line) {
     return <div>{line}</div>
   })
+
+  var programName = program.toJS().name
 
   var openStyle = {
 
@@ -36,7 +38,7 @@ var Window = component(function({program, buffer, command, isOpen}) {
   return <div className={classes}>
     <div>{lines}</div>
     <form onSubmit={onCommand}>
-      <span>&gt;</span>
+      <span>{programName}&gt;</span>
       <input value={command.deref()} onChange={onCommandChange}/>
     </form>
   </div>
@@ -49,7 +51,7 @@ var Window = component(function({program, buffer, command, isOpen}) {
     e.preventDefault()
     var name = command.deref()
     command.update(() => "")
-    runCommand(program, buffer, name)
+    runCommand(state, buffer, name)
   }
 
   function onClick(e) {
@@ -73,18 +75,21 @@ exports.state = state
 
 
 
-function runCommand(program, buffer, name) {
-  var result = exec[name](program)
-  // needs to operate on the buffer
+function runCommand(state, buffer, name) {
+  var progName = state.cursor("program").get("name")
+  var prog = state.cursor().toJS()
+  var result = exec[name](state)
+  console.log("progName", progName, prog)
   buffer.update((list) => {
     return list
-      .push("> " + name)
+      .push(progName+ "> " + name)
       .push(result)
   })
 }
 
 
 function openTerminal() {
+  runCommand(state, state.cursor('buffer'), "init")
   state.cursor('isOpen').update(() => true)
 }
 
