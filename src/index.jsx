@@ -24,6 +24,7 @@ var App = component(function({terminal, game, history}) {
       game={game}
     />
   </div>
+
 })
 
 var TerminalPanel = component(function({terminal, player, game}) {
@@ -38,6 +39,7 @@ var TerminalPanel = component(function({terminal, player, game}) {
   }
 
   return <div style={terminalStyle}>
+    <Debug game={game} />
     <Terminal.Main terminal={terminal} player={player} game={game}/>
   </div>
 })
@@ -48,7 +50,6 @@ var StoryPanel = component(function({game, history}) {
     marginRight: TERMINAL_WIDTH
   }
 
-    //<Debug game={game}/>
   return <div style={style}>
     <Story.Main game={game} history={history}/>
   </div>
@@ -58,8 +59,6 @@ var Debug = component(function({game}) {
   return <div>
     <h3>Player</h3>
     <p><pre><code>{JSON.stringify(game.get('player').toJS(), null, "  ")}</code></pre></p>
-    <h3>Rooms</h3>
-    <p><pre><code>{JSON.stringify(game.get('rooms').toJS(), null, "  ")}</code></pre></p>
     <h3>Villain</h3>
     <p><pre><code>{JSON.stringify(game.get('villain').toJS(), null, "  ")}</code></pre></p>
   </div>

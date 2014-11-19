@@ -146,6 +146,7 @@ function Detail(type, name, properties) {
 
 // the quick name for a detail
 function detailName(detail) {
+  if (!detail) return ""
   var adjectives = detail.get('properties').map(propertyName).toArray().join(", ")
   return "a " + adjectives + " " + detail.get('name')
 }
@@ -196,6 +197,7 @@ function propertyName(prop) {
 }
 
 function detailIsEnabled(detail) {
+  if (!detail) return false
   // if properties are none of: broken, locked, disabled, etc :)
   var badProps = detail.get('properties').filter(function(prop) {
     var name = prop.get('name')
@@ -206,6 +208,7 @@ function detailIsEnabled(detail) {
 }
 
 function detailIsBroken(detail) {
+  if (!detail) return false
   return detail.get('properties').filter((p) => p.get('name') == "broken").count() > 0
 }
 

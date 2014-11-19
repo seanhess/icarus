@@ -35,6 +35,12 @@ var Window = component(function({buffer, command, player, game}) {
     'terminal-closed': !isOpen
   });
 
+  var style = {
+    position: 'absolute',
+    top: 0, left: 0, right: 0,
+    height: 400
+  }
+
   return <div className={classes}>
     <div>{lines}</div>
     <form onSubmit={onCommand}>

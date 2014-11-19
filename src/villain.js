@@ -7,8 +7,8 @@ var History = require('./history')
 
 exports.initialState = function() {
   return Immutable.Map({
-    location: Ship.rooms.get("bridge"),
-    intention: Ship.rooms.get("engineRoom")
+    location: Ship.rooms.getIn(["bridge", "id"]),
+    intention: Ship.rooms.getIn(["engineRoom", "id"])
   })
 }
 
@@ -30,11 +30,11 @@ function randomMove(villain) {
 }
 
 function moveTowardGoal(villain) {
-  var currentRoom = villain.get("location").toJS()
-  var intendedRoom = villain.get("intention").toJS()
+  var currentRoom = villain.get("location")
+  var intendedRoom = villain.get("intention")
   var nextRoomId = dijkstra.nextRoomToDestination(Ship.rooms, currentRoom, intendedRoom)
   return function(l) {
-    return Ship.rooms.get(nextRoomId)
+    return nextRoomId
   }
 }
 
@@ -50,8 +50,10 @@ function moveTowardGoal(villain) {
 //exports.state = villain
 
 
-exports.isSeen = function(villain, player) {
-  return player.getIn(['location', 'id']) == villain.getIn(['location', 'id'])
+exports.isSeen = function(player, villain) {
+  console.log("TEST", villain.get('location'), player.get('room'))
+  console.log("UMM", villain.toJS())
+  return player.get('room') == villain.get('location')
 }
 
 //// how to handle time... he makes a move?

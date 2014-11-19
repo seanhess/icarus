@@ -5,6 +5,7 @@ var Ship = require('../ship')
 var Game = require('../game')
 var Player = require('../player')
 var Time = require('./Time')
+var {showStyle} = require('../../lib/render')
 
 var Details = component(function({details}) {
   var elements = details.toArray().map(function(detail) {
@@ -22,19 +23,12 @@ var Details = component(function({details}) {
 
 var Focused = component(function({time, detail}) {
 
-  // detail = id of a detail. I have nothing else :)
-
-  // how to know whether to display different options?
-  // look around = always
-  // break the terminal = if fixed
-  // fix the terminal = if broken
-  // enable the terminal = if disabled
-
   var showBreak = showStyle(Ship.detailIsEnabled(detail))
   var showFix = showStyle(Ship.detailIsBroken(detail))
 
   return <div>
-    <p><Time time={time}/>
+    <p>
+      <Time time={time}/>
       <span> - </span>
       <span>You are looking at: {Ship.detailName(detail)}</span>
     </p>
@@ -55,9 +49,3 @@ function runTick(action) {
 
 exports.Main = Details
 exports.Focused = Focused
-
-function showStyle(bool) {
-  return {
-    display: (bool) ? 'inline' : 'none'
-  }
-}

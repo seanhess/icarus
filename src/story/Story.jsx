@@ -11,6 +11,7 @@ var Villain = require('../villain')
 var Details = require('./Details')
 var Time = require('./Time')
 var {LinkParagraph, makeLinkMove, killLink} = require('./Links.jsx')
+var {showStyle} = require('../../lib/render')
 
 var StoryMain = component(function({game, history}) {
   var log = history.toArray().map(function(state) {
@@ -30,12 +31,11 @@ var PlayerView = component(function({game, makeLink}) {
   var room = Player.playerRoom(game, player)
   var detail = Player.playerDetail(game, player)
 
-  if (detail) {
-    return <Details.Focused time={game.get('time')} detail={detail}/>
-  }
+  var showDetails        = showStyle(!detail)
+  var showFocusedDetails = showStyle(detail)
 
-  else {
-    return <div>
+  return <div>
+    <div style={showDetails}>
       <p><Time time={game.get('time')}/>
         <span> - </span>
         <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
@@ -43,7 +43,11 @@ var PlayerView = component(function({game, makeLink}) {
       <p><Details.Main details={room.cursor('details')}/></p>
       <p><VillainFound player={player} villain={villain}/></p>
     </div>
-  }
+
+    <div style={showFocusedDetails}>
+      <Details.Focused time={game.get('time')} detail={detail}/>
+    </div>
+  </div>
 })
 
 

@@ -4,7 +4,7 @@ var Immutable = require('immutable')
 
 function pathToRoom(roomsMap, fromRoom, toRoom) {
     var rooms = roomsGraph(roomsMap)
-    return shortestPath(rooms, fromRoom.id, toRoom.id)
+    return shortestPath(rooms, fromRoom, toRoom)
 }
 
 function nextRoomToDestination(roomsMap, fromRoom, toRoom) {
