@@ -4,15 +4,14 @@ var cuid = require('cuid')
 
 
 // -- INITIAL ROOMS -------------------------------------------
-var bridge = roomCreate("bridge")
+var bridge = roomCreate("bridge", "Bridge")
 bridge = roomAddDescription(bridge, [
   "Smashed control wheels are everywhere and wires hang dangerously. You see the bridge is in poor condition.", 
-  ["The hallway is behind you","hall"],
+  ["The hallway is behind you", "hall"],
 ])
-
 bridge = roomAddDetail(bridge, Terminal(null, [Broken()]))
 
-var hall = roomCreate("hall")
+var hall = roomCreate("hall", "Hallway")
 hall = roomAddDescription(hall, [
   "Red lights flicker along a steel catwalk. Steam fills the room.",
   ["Some steps ascend to the bridge.","bridge"],
@@ -24,13 +23,14 @@ hall = roomAddDescription(hall, [
   //description: "",
 //})
 
-var crewQuarters = roomCreate("crewQuarters")
+var crewQuarters = roomCreate("crewQuarters", "Crew Quarters")
 crewQuarters = roomAddDescription(crewQuarters, [
   "Cryo tanks sit like blue pulsing tombs for the dead remains of your comrades.",
   ["The door behind you opens into the hall", "hall"],
 ])
+exports.crewQuarters = crewQuarters
 
-var engineRoom = roomCreate("engineRoom")
+var engineRoom = roomCreate("engineRoom", "Engine Room")
 engineRoom = roomAddDescription(engineRoom, [
   "The quantum reactor spins at speeds unimaginable. It's hot in here.",
   ["There is a door behind you.","hall"],
@@ -69,9 +69,10 @@ exports.roomById = function(state, id) {
 
 // -- GENERATE ROOMS ---------------------------------------------
 
-function roomCreate(id) {
+function roomCreate(id, name) {
   return Immutable.fromJS({
     id: id,
+    name: name,
     description: "",
     connections: {},
     details: {},

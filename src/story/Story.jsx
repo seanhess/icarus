@@ -35,11 +35,9 @@ var PlayerView = component(function({game, makeLink}) {
   var showFocusedDetails = showStyle(detail)
 
   return <div>
+    <EntrySeparator room={room} time={game.get('time')} />
     <div style={showDetails}>
-      <p><Time time={game.get('time')}/>
-        <span> - </span>
-        <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
-      </p>
+      <p><LinkParagraph text={room.get('description')} makeLink={makeLink}/></p>
       <p><Details.Main details={room.cursor('details')}/></p>
       <p><VillainFound player={player} villain={villain}/></p>
     </div>
@@ -56,6 +54,23 @@ var VillainFound = component(function({player, villain}) {
     return <span>You see the bad guy</span>
   }
   return <span/>
+})
+
+var EntrySeparator = component(function({time, room}) {
+
+  var style = {
+    backgroundColor: "#333",
+    color: "white",
+
+  }
+
+  return <div style={style}>
+    <div>
+      <Time time={time}/>
+      <span> - </span>
+      <span>{room.get('name')}</span>
+    </div>
+  </div>
 })
 
 

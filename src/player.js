@@ -7,7 +7,7 @@ var {curry} = require('lodash')
 
 exports.initialState = function() {
   return Immutable.fromJS({
-    room: Ship.rooms.getIn(["crewQuarters", "id"]),
+    room: Ship.crewQuarters.get('id'),
     detail: null, // the detail you are carefully looking at
   })
 }
