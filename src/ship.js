@@ -74,7 +74,7 @@ function roomCreate(id) {
     id: id,
     description: "",
     connections: {},
-    details: [],
+    details: {},
   })
 }
 
@@ -83,8 +83,9 @@ function roomAddDescription(room, description) {
 }
 
 function roomAddDetail(room, obj) {
-  var detail = Immutable.fromJS(obj).set('id', cuid())
-  return room.update('details', (fs) => fs.push(detail))
+  var id = room.get('id') + " " + obj.get('name')
+  var detail = Immutable.fromJS(obj).set('id', id)
+  return room.update('details', (ds) => ds.set(id, detail))
 }
 
 function roomAddConnection(room, toRoom, properties) {

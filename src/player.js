@@ -86,15 +86,15 @@ exports.lookAround = function() {
 // hmm... 
 exports.detailFix = function() {
   return function(state) {
-    return updateCurrentDetail(state, function(detail) {
-      return detail.set('properties', Immutable.fromJS([]))
+    return state.updateIn(detailKeyPath(state), function(detail) {
+      return detail.set('properties', Immutable.List([]))
     })
   }
 }
 
 exports.detailBreak = function() {
   return function(state) {
-    return updateCurrentDetail(state, function(detail) {
+    return state.updateIn(detailKeyPath(state), function(detail) {
       return detail.update('properties', function(ds) {
         return ds.push(Ship.Broken())
       })
@@ -110,6 +110,15 @@ exports.detailDisable = curry(function(detail) {
 
 })
 
+function roomKeyPath(player) {
+  return ['rooms', '']
+}
+
+function detailKeyPath(state) {
+  var roomId = state.getIn(['player', 'room'])
+  var detailId = state.getIn(['player', 'detail'])
+  return ['rooms', roomId, 'details', detailId]
+}
 
 function updateCurrentRoom(state, f) {
 

@@ -14,7 +14,7 @@ var {LinkParagraph, makeLinkMove, killLink} = require('./Links.jsx')
 
 var StoryMain = component(function({game, history}) {
   var log = history.toArray().map(function(state) {
-    return <PlayerView game={state} makeLink={killLink}/>
+    return <PlayerView game={state} makeLink={killLink} key={state.get('turn')}/>
   })
 
   return <div>
