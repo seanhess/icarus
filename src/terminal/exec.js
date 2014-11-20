@@ -30,7 +30,7 @@ function availablePrograms(terminalState, gameState) {
 
 function unavailablePrograms(terminalState, gameState) {
   var availables = availablePrograms(terminalState, gameState)
-  return _.pick(allPrograms(), (program) => !!availables[program.name])
+  return _.pick(allPrograms(), (program) => !availables[program.name])
 }
 
 function allPrograms() {

@@ -95,7 +95,7 @@ function runCommand(terminalState, gameState, commandText) {
   var args = _.rest(inputs)
   var currentProgramName = terminalState.getIn(['program', 'name'])
 
-  var {newTerminalState, newGameState, outputText} = exec.run(terminalState.deref(), "gameState.deref()", command, args)
+  var {newTerminalState, newGameState, outputText} = exec.run(terminalState.deref(), gameState.deref(), command, args)
   
   terminalState.update(() => clearCommand(updateBuffer(newTerminalState, currentProgramName, commandText, outputText))) 
   gameState.update(() => newGameState)
