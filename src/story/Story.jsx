@@ -5,47 +5,63 @@ var Ship = require('../ship')
 var Game = require('../game')
 var Terminal = require('../terminal/Terminal')
 var Events = require('../events/events')
-var History = require('../history')
 var Player = require('../player')
 var Villain = require('../villain')
 var Details = require('./Details')
 var Time = require('./Time')
-var {LinkParagraph, makeLinkMove, killLink} = require('./Links.jsx')
 var {showStyle} = require('../../lib/render')
+var {assign, map} = require('lodash')
 
-var StoryMain = component(function({game, history}) {
-  var log = history.toArray().map(function(state) {
-    return <PlayerView game={state} makeLink={killLink} key={state.get('turn')}/>
-  })
-
+var StoryMain = component(function({game}) {
   return <div>
-    <div>{log}</div>
-    <PlayerView game={game} makeLink={makeLinkMove}/>
+    <PlayerView game={game}/>
   </div>
 })
 
-
-var PlayerView = component(function({game, makeLink}) {
+var PlayerView = component(function({game}) {
   var player = game.get('player')
   var villain = game.get('villain')
   var room = Player.playerRoom(game, player)
   var detail = Player.playerDetail(game, player)
 
-  var showDetails        = showStyle(!detail)
+  var style = {
+    padding: 4
+  }
+
+  var showDetails        = assign(showStyle(!detail))
   var showFocusedDetails = showStyle(detail)
 
   return <div>
     <EntrySeparator room={room} time={game.get('time')} />
-    <div style={showDetails}>
-      <p><LinkParagraph text={room.get('description')} makeLink={makeLink}/></p>
-      <p><Details.Main details={room.cursor('details')}/></p>
-      <p><VillainFound player={player} villain={villain}/></p>
-    </div>
-
-    <div style={showFocusedDetails}>
-      <Details.Focused time={game.get('time')} detail={detail}/>
+    <div style={style}>
+      <div style={showDetails}>
+        <PlayerRoomView room={room} player={player} villain={villain}/>
+      </div>
+      <div style={showFocusedDetails}>
+        <Details.Focused time={game.get('time')} detail={detail}/>
+      </div>
     </div>
   </div>
+})
+
+var PlayerRoomView = component(function({room, player, villain}) {
+  return <div>
+    <p>{room.get('description')}</p>
+    <p><Exits room={room}/></p>
+    <p><Details.Main details={room.cursor('details')}/></p>
+    <p><VillainFound player={player} villain={villain}/></p>
+  </div>
+})
+
+var Exits = component(function({room}) {
+
+  var exits = map(room.get('connections').toJS(), function(connection, id) {
+    return <div>Exit - <a onClick={onClickMove(id)}>{connection.name}</a></div>
+  })
+
+  return <p>
+    <div>{exits}</div>
+  </p>
 })
 
 
@@ -61,7 +77,7 @@ var EntrySeparator = component(function({time, room}) {
   var style = {
     backgroundColor: "#333",
     color: "white",
-
+    padding: 4,
   }
 
   return <div style={style}>
@@ -73,6 +89,13 @@ var EntrySeparator = component(function({time, room}) {
   </div>
 })
 
+
+function onClickMove(room) {
+  return function() {
+    var action = Player.moveTo(room)
+    Game.runTick(action)
+  }
+}
 
 
 exports.Main = StoryMain

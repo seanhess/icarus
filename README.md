@@ -16,7 +16,8 @@ Open index.html in browser.
 - [x] Open the terminal via an object
 - [x] Inspect objects?
 
-- [ ] disable links for objects in history
-- [ ] be able to look around after focusing ... list of actions
+- [x] be able to look around after focusing ... list of actions
+- [x] add titles to the descriptions: The Bridge, The Engine Room
 
-- [ ] add titles to the descriptions: The Bridge, The Engine Room
+- [ ] separate exits from the text
+- [ ] disable links for objects in history, disable old buttons

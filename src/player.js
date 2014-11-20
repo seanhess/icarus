@@ -2,7 +2,6 @@ var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var Ship = require('./ship')
 var Events = require('./events/events')
-var History = require('./history')
 var {curry} = require('lodash')
 
 exports.initialState = function() {
