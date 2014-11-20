@@ -6,6 +6,9 @@ var _         = require('lodash')
 var exec = require('./exec')
 var mainProgram = require('./programs/index').main
 
+var Ship = require('../ship')
+var Player = require('../player')
+
 var cx = React.addons.classSet;
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
@@ -17,7 +20,7 @@ var state = immstruct({
 })
 // program: name, available commands
 
-var Window = component(function({game, terminal, program, buffer, command, isOpen}) {
+var Window = component(function({game, terminal, program, buffer, command, isOpen, player}) {
 
   var lines = buffer.toArray().map(function(line) {
     return <div>{line}</div>
@@ -33,10 +36,18 @@ var Window = component(function({game, terminal, program, buffer, command, isOpe
 
   }
 
+  var isOpen = isTerminalOpen(Player.playerDetail(game, player))
+
   var classes = cx({
-    'terminal-open': isOpen.deref(),
-    'terminal-closed': !isOpen.deref(),
+    'terminal-open': isOpen,
+    'terminal-closed': !isOpen
   });
+
+  var style = {
+    position: 'absolute',
+    top: 0, left: 0, right: 0,
+    height: 400
+  }
 
   return <div className={classes}>
     <div>{lines}</div>
@@ -62,14 +73,14 @@ var Window = component(function({game, terminal, program, buffer, command, isOpe
 })
 
 
-var Main = component(function({terminal, game}) {
+var Main = component(function({terminal, player, game}) {
   return <Window 
+    player={player}
+    buffer={terminal.cursor('buffer')}
+    command={terminal.cursor('command')}
     game={game}
     terminal={terminal}
     program={terminal.cursor('program')}
-    buffer={terminal.cursor('buffer')}
-    command={terminal.cursor('command')}
-    isOpen={terminal.cursor('isOpen')}
   />
 })
 
@@ -103,14 +114,11 @@ function runCommand(terminalState, gameState, commandText) {
   }
 }
 
-
-function openTerminal() {
-  state.cursor('isOpen').update(() => true)
+function isTerminalOpen(detail) {
+  if (!detail) return false
+  return (
+    detail.get('type') == "terminal" && 
+    Ship.detailIsEnabled(detail)
+  )
 }
 
-function closeTerminal() {
-  state.cursor('isOpen').update(() => false)
-}
-
-exports.openTerminal = openTerminal
-exports.closeTerminal = closeTerminal

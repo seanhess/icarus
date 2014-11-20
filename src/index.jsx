@@ -1,3 +1,4 @@
+/* @flow */
 var React     = require('react')
 var immstruct = require('immstruct')
 var component = require('../lib/component')
@@ -13,12 +14,21 @@ var TERMINAL_WIDTH = 500
 var App = component(function({terminal, game, history}) {
   var appStyle = {}
   return <div style={appStyle}>
-    <StoryPanel game={game} history={history}/>
-    <TerminalPanel game={game} terminal={terminal}/>
+    <StoryPanel 
+      game={game} 
+      history={history}
+    />
+    <TerminalPanel 
+      terminal={terminal}
+      player={game.cursor('player')}
+      game={game}
+    />
   </div>
+
 })
 
-var TerminalPanel = component(function({terminal, game}) {
+
+var TerminalPanel = component(function({terminal, player, game}) {
   var terminalStyle = {
     fontFamily: "monospace",
     backgroundColor: "black", 
@@ -31,7 +41,8 @@ var TerminalPanel = component(function({terminal, game}) {
   }
 
   return <div style={terminalStyle}>
-    <Terminal.Main terminal={terminal} game={game}/>
+    <Debug game={game} />
+    <Terminal.Main terminal={terminal} player={player} game={game}/>
   </div>
 })
 var StoryPanel = component(function({game, history}) {
@@ -42,6 +53,15 @@ var StoryPanel = component(function({game, history}) {
 
   return <div style={style}>
     <Story.Main game={game} history={history}/>
+  </div>
+})
+
+var Debug = component(function({game}) {
+  return <div>
+    <h3>Player</h3>
+    <p><pre><code>{JSON.stringify(game.get('player').toJS(), null, "  ")}</code></pre></p>
+    <h3>Villain</h3>
+    <p><pre><code>{JSON.stringify(game.get('villain').toJS(), null, "  ")}</code></pre></p>
   </div>
 })
 
@@ -63,5 +83,5 @@ function render() {
 
 render();
 Terminal.state.on('swap', render);
-Game.state.on('swap', render);
+Game.state.on('swap',render);
 History.state.on('swap', render);

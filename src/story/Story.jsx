@@ -1,78 +1,78 @@
 var React     = require('react')
-var immstruct = require('immstruct')
 var component = require('../../lib/component')
 
-var ship = require('../ship')
+var Ship = require('../ship')
 var Game = require('../game')
 var Terminal = require('../terminal/Terminal')
 var Events = require('../events/events')
 var History = require('../history')
 var Player = require('../player')
 var Villain = require('../villain')
+var Details = require('./Details')
+var Time = require('./Time')
 var {LinkParagraph, makeLinkMove, killLink} = require('./Links.jsx')
+var {showStyle} = require('../../lib/render')
 
 var StoryMain = component(function({game, history}) {
   var log = history.toArray().map(function(state) {
-    return <PlayerView game={state} makeLink={killLink}/>
+    return <PlayerView game={state} makeLink={killLink} key={state.get('turn')}/>
   })
 
   return <div>
     <div>{log}</div>
     <PlayerView game={game} makeLink={makeLinkMove}/>
-    <button onClick={Terminal.openTerminal}>Open Terminal</button>
-    <button onClick={Terminal.closeTerminal}>Close Terminal</button>
   </div>
 })
 
-exports.Main = StoryMain
 
 var PlayerView = component(function({game, makeLink}) {
-  var player = game.cursor('player')
-  var villain = game.cursor('villain')
-  var room = player.cursor('location')
+  var player = game.get('player')
+  var villain = game.get('villain')
+  var room = Player.playerRoom(game, player)
+  var detail = Player.playerDetail(game, player)
 
-  var villainView = <span/>
-  if (Villain.isSeen(player, villain)) {
-    villainView = <span>You see the bad guy</span>
-  }
+  var showDetails        = showStyle(!detail)
+  var showFocusedDetails = showStyle(detail)
 
   return <div>
-    <p>
-      <span>{Events.renderTime(game.get('time'))}</span>
-      <span> - </span>
-      <LinkParagraph text={room.get('description')} makeLink={makeLink}/>
-    </p>
-    <p><Objects objects={room.cursor('objects')}/></p>
-    <p>{villainView}</p>
+    <EntrySeparator room={room} time={game.get('time')} />
+    <div style={showDetails}>
+      <p><LinkParagraph text={room.get('description')} makeLink={makeLink}/></p>
+      <p><Details.Main details={room.cursor('details')}/></p>
+      <p><VillainFound player={player} villain={villain}/></p>
+    </div>
+
+    <div style={showFocusedDetails}>
+      <Details.Focused time={game.get('time')} detail={detail}/>
+    </div>
   </div>
 })
 
-// need to be able to: select the terminal and have it open!
-// woah...
 
-// if termianl
-
-var Objects = component(function({objects}) {
-  var elements = objects.toArray().map(function(obj) {
-    return <span><a 
-      href="#"
-      onClick={inspectObject(obj)}>
-      {obj.get('name')}
-    </a></span>
-  })
-  if (elements.length) {
-    return <div>You see: {elements}</div>
+var VillainFound = component(function({player, villain}) {
+  if (Villain.isSeen(player, villain)) {
+    return <span>You see the bad guy</span>
   }
   return <span/>
 })
 
+var EntrySeparator = component(function({time, room}) {
 
-function inspectObject(object) {
-  return function() {
-    console.log("UMM OK", object.get('name'))
-    if (object.get('name') == "terminal") {
-      Terminal.openTerminal()
-    }
+  var style = {
+    backgroundColor: "#333",
+    color: "white",
+
   }
-}
 
+  return <div style={style}>
+    <div>
+      <Time time={time}/>
+      <span> - </span>
+      <span>{room.get('name')}</span>
+    </div>
+  </div>
+})
+
+
+
+exports.Main = StoryMain
