@@ -10,23 +10,20 @@ var Player = require('../player')
 var Villain = require('../villain')
 var Details = require('./Details')
 var Time = require('./Time')
-var {LinkParagraph, makeLinkMove, killLink} = require('./Links.jsx')
 var {showStyle} = require('../../lib/render')
 var {assign, map} = require('lodash')
 
 var StoryMain = component(function({game, history}) {
-  var log = history.toArray().map(function(state) {
-    return <PlayerView game={state} makeLink={killLink} key={state.get('turn')}/>
-  })
-
   return <div>
-    <div>{log}</div>
-    <PlayerView game={game} makeLink={makeLinkMove}/>
+    <PlayerView game={game}/>
   </div>
 })
 
 
-var PlayerView = component(function({game, makeLink}) {
+// player view doesn't have everything? It's just the container?
+// this decides which page to display?
+
+var PlayerView = component(function({game}) {
   var player = game.get('player')
   var villain = game.get('villain')
   var room = Player.playerRoom(game, player)
@@ -43,12 +40,8 @@ var PlayerView = component(function({game, makeLink}) {
     <EntrySeparator room={room} time={game.get('time')} />
     <div style={style}>
       <div style={showDetails}>
-        <p>{room.get('description')}</p>
-        <p><Exits room={room}/></p>
-        <p><Details.Main details={room.cursor('details')}/></p>
-        <p><VillainFound player={player} villain={villain}/></p>
+        <PlayerRoomView room={room} player={player} villain={villain}/>
       </div>
-
       <div style={showFocusedDetails}>
         <Details.Focused time={game.get('time')} detail={detail}/>
       </div>
@@ -56,10 +49,19 @@ var PlayerView = component(function({game, makeLink}) {
   </div>
 })
 
+var PlayerRoomView = component(function({room, player, villain}) {
+  return <div>
+    <p>{room.get('description')}</p>
+    <p><Exits room={room}/></p>
+    <p><Details.Main details={room.cursor('details')}/></p>
+    <p><VillainFound player={player} villain={villain}/></p>
+  </div>
+})
+
 var Exits = component(function({room}) {
 
   var exits = map(room.get('connections').toJS(), function(connection, id) {
-    return <div><a onClick={onClickMove(id)}>{connection.name}</a></div>
+    return <div>Exit - <a onClick={onClickMove(id)}>{connection.name}</a></div>
   })
 
   return <p>

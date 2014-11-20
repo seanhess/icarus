@@ -33,9 +33,9 @@ var Focused = component(function({time, detail}) {
     </p>
 
     <p>
-      <button onClick={runTick(Player.lookAround())}>Look Around</button>
-      <button style={showBreak} onClick={runTick(Player.detailBreak())}>Break it</button>
-      <button style={showFix} onClick={runTick(Player.detailFix())}>Fix it</button>
+      <div><a onClick={runTick(Player.lookAround())}>Look Around</a> </div>
+      <div><a style={showBreak} onClick={runTick(Player.detailBreak())}>Break it</a> </div>
+      <div><a style={showFix} onClick={runTick(Player.detailFix())}>Fix it </a> </div>
     </p>
   </div>
 })
