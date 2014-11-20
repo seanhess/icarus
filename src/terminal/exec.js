@@ -20,6 +20,7 @@ function run(terminalState, gameState, commandName, args) {
 }
 
 function availableCommands(terminalState, gameState) {
+    console.log("commands", terminalState.getIn(['program', 'commands'])(terminalState, gameState))
   return _.assign(terminalState.getIn(['program', 'commands'])(terminalState, gameState), baseCommands)
 }
 

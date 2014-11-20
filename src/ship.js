@@ -34,6 +34,20 @@ crewQuarters = roomAddConnection(crewQuarters, hall)
 
 engineRoom = roomAddConnection(engineRoom, hall)
 
+
+// Satellite
+
+var satelliteStorage = roomCreate("satelliteStorage", "Satellite Storage")
+    satelliteStorage = roomAddDescription(satelliteStorage,
+      "This room is filled with everything a man could need during his months in space."+
+      "The shelves are stocked with food, clothing, toiletries, spare parts, and many other"+
+      "things stored in airtight containers without labels.  Why isn’t anything labeled??"+ 
+      "On each end of the room, an airlock leads to another section of the satellite."+
+      "At least the doors are labeled!  A ladder leads upward as well, toward the center.")
+
+
+
+
 // -- ROOMS ------------------------------------------------------
 
 function roomRawText(room) {
