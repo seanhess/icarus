@@ -1,74 +1,78 @@
 var programs = require('./programs/index')
+var Immutable = require('immutable')
+// var commands = {
 
-var commands = {
+// }
+
+var baseCommands = {
   help: help,
-  status: status,
-  init: init,
-  mail: mail,
-  main: main,
+  // init: init,
+  load: load,
   quit: quit,
-  //"": nothing,
 }
 
 function exec(terminalState, gameState, commandName, args) {
-  return {
-    newTerminalState: terminalState,
-    newGameState: gameState,
-    outputText: "asdf" + commandName
+    
+  var commands = availableCommands(terminalState, gameState)
+
+  if (!_.has(commands, commandName)) {
+    return terminalError(terminalState, gameState, "Command does not exist")
+  }
+  else {
+    return commands[commandName](terminalState, gameState, args)
   }
 }
 
-function command(name, f) {
-  f.name = name
-  return f
+
+function availableCommands(terminalState, gameState) {
+  return _.assign(terminalState.getIn(['program', 'commands']).toJS(), baseCommands)
 }
 
-function commandName(c) {
-  return c.name
+function availablePrograms(terminalState, gameState) {
+  return programs  // for now, all programs are available.
 }
 
-function help(state) {
-  console.log(availablePrograms())
-  return "Available commands: " + _.keys(availablePrograms().commands)
+function terminalError(terminalState, gameState, errorText) {
+  return updatedState(terminalState, gameState, errorText)
 }
 
-function status() {
-  return "Systems normal"
-}
-
-function init(state) {
-  return programs.main // load(state, programs.main)
-}
-
-function mail(state) {
-  return load(state, programs.mail)
-}
-
-function main(state) {
-  return load(state, programs.main)
-}
-
-function quit(state) {
-  return load(state, programs.main)
-}
-
-////////////////////////////
-// Programs ////////////////
-////////////////////////////
-
-
-function load(state, program) {
-  state.cursor("program").update(function() {return program})
-  return program.loadText
-}
-
-function availablePrograms() {  //eventually this will take state into consideration
-  return programs
+function updatedState(terminalState, gameState, outputText) {
+  return {
+    newTerminalState: terminalState,
+    newGameState: gameState,
+    outputText: outputText
+  }
 }
 
 
-function currentProgram(state) {
-  return state.cursor('program').toJS()
+
+//////////////////////
+/// BASE COMMANDS ////
+//////////////////////
+
+
+function load(terminalState, gameState, args) {
+  var [programName] = args
+  if (!programName || !_.has(availablePrograms(terminalState, gameState), programName)) {
+    return terminalError(terminalState, gameState, "Program unavailable.")
+  } else {
+    var program = programs[programName]
+    return updatedState(
+      terminalState.set('program', Immutable.fromJS(program)),
+      gameState,
+      program.loadText
+    )
+  }
+}
+
+function quit(terminalState, gameState) {
+  return load(terminalState, gameState, [programs.main.name])
+}
+
+function help(terminalState, gameState, args) {
+  var [command] = args
+  var commands = _.keys(availableCommands(terminalState, gameState)).join(", ")
+  return updatedState(terminalState, gameState, "Available commands: " + commands + " ")
 }
 
 module.exports = exec

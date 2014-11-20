@@ -11,7 +11,7 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var state = immstruct({
   command: "",
-  buffer: [],
+  buffer: [mainProgram.loadText],
   isOpen: false,
   program: mainProgram
 })
@@ -53,8 +53,7 @@ var Window = component(function({game, terminal, program, buffer, command, isOpe
   function onCommand(e) {
     e.preventDefault()
     var name = command.deref()
-    command.update(() => "")
-    runCommand(terminal, game, name, null)
+    runCommand(terminal, game, name, null)  //todo: add args
   }
 
   function onClick(e) {
@@ -88,7 +87,12 @@ function runCommand(terminalState, gameState, commandText) {
 
   var {newTerminalState, newGameState, outputText} = exec(terminalState.deref(), "gameState.deref()", command, args)
   
-  terminalState.update(() => updateBuffer(newTerminalState, currentProgramName, commandText, outputText))  
+  terminalState.update(() => clearCommand(updateBuffer(newTerminalState, currentProgramName, commandText, outputText))) 
+  gameState.update(() => newGameState)
+
+  function clearCommand(terminalState) {
+    return terminalState.set('command', "")
+  }
 
   function updateBuffer(terminalState, programName, commandText, outputText) {
     return terminalState.updateIn(['buffer'], (buff) => {
