@@ -42,17 +42,33 @@ function initialState() {
 
 // so now everyone can update and be happy
 function tick(playerAction, state) {
-  var nextTurn = state.get('turn') + 1
-  var nextTime = state.get('time').clone().add(TURN_DURATION*1000)
+  
+  // try using cursors instead to make this easier
+  state.update('turn', t => t + 1)
+  state.update('time', t => t.clone().add(TURN_DURATION*1000))
 
-  var newState = state
-    .update(playerAction)
-    .update(Villain.turn)
+  var cursors = {
+    player:  state.cursor('player'),
+    villain: state.cursor('villain'),
+    detail:  state.cursor(detailKeyPath(state)),
+    room:    state.cursor(roomKeyPath(state)),
+    game:    state
+  }
 
-  return newState.merge({
-    turn: nextTurn,
-    time: nextTime,
-  })
+  playerAction(cursors)
+  Villain.turn(cursors)
+
+  //var nextTurn = state.get('turn') + 1
+  //var nextTime = state.get('time').clone().add(TURN_DURATION*1000)
+
+  //var newState = state
+    //.update(playerAction)
+    //.update(Villain.turn)
+
+  //return newState.merge({
+    //turn: nextTurn,
+    //time: nextTime,
+  //})
 }
 
 function runTick(playerAction) {
@@ -62,7 +78,20 @@ function runTick(playerAction) {
 
   History.save(state)
 
-  state.update(function(oldState) {
-    return tick(playerAction, oldState)
-  })
+  tick(playerAction, state)
+
+  //state.update(function(oldState) {
+    //return tick(playerAction, oldState)
+  //})
+}
+
+function roomKeyPath(game) {
+  var roomId = game.getIn(['player', 'room'])
+  return ['rooms', roomId]
+}
+
+function detailKeyPath(game) {
+  var roomId = game.getIn(['player', 'room'])
+  var detailId = game.getIn(['player', 'detail'])
+  return ['rooms', roomId, 'details', detailId]
 }

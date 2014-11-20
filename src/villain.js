@@ -11,13 +11,11 @@ exports.initialState = function() {
   })
 }
 
-exports.turn = function(state) {
+exports.turn = function({villain, game}) {
   // 1. calculate action based on state
   // 2. perform action
-  return state.update('villain', function(villain) {
-    var move = moveTowardGoal(villain)
-    return villain.update('location', move)
-  })
+  var move = moveTowardGoal(villain, game.get('rooms'))
+  villain.update('location', move)
 }
 
 function randomMove(villain) {
@@ -28,10 +26,10 @@ function randomMove(villain) {
   }
 }
 
-function moveTowardGoal(villain) {
+function moveTowardGoal(villain, rooms) {
   var currentRoom = villain.get("location")
   var intendedRoom = villain.get("intention")
-  var nextRoomId = dijkstra.nextRoomToDestination(Ship.rooms, currentRoom, intendedRoom)
+  var nextRoomId = dijkstra.nextRoomToDestination(rooms, currentRoom, intendedRoom)
   return function(l) {
     return nextRoomId
   }
