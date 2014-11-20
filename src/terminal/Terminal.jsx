@@ -4,7 +4,6 @@ var immstruct = require('immstruct')
 var _         = require('lodash')
 
 var exec = require('./exec')
-var mainProgram = require('./programs/index').main
 
 var Ship = require('../ship')
 var Player = require('../player')
@@ -14,9 +13,9 @@ var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 var state = immstruct({
   command: "",
-  buffer: [mainProgram.loadText],
+  buffer: [exec.mainProgram().loadText()],
   isOpen: false,
-  program: mainProgram
+  program: exec.mainProgram()
 })
 // program: name, available commands
 
@@ -96,7 +95,7 @@ function runCommand(terminalState, gameState, commandText) {
   var args = _.rest(inputs)
   var currentProgramName = terminalState.getIn(['program', 'name'])
 
-  var {newTerminalState, newGameState, outputText} = exec(terminalState.deref(), "gameState.deref()", command, args)
+  var {newTerminalState, newGameState, outputText} = exec.run(terminalState.deref(), "gameState.deref()", command, args)
   
   terminalState.update(() => clearCommand(updateBuffer(newTerminalState, currentProgramName, commandText, outputText))) 
   gameState.update(() => newGameState)

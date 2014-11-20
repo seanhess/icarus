@@ -1,48 +1,33 @@
 var programs = require('./programs/index')
+var ph = require('./programs/program-helper')
 var Immutable = require('immutable')
-// var commands = {
-
-// }
 
 var baseCommands = {
   help: help,
-  // init: init,
-  load: load,
   quit: quit,
 }
 
-function exec(terminalState, gameState, commandName, args) {
+function run(terminalState, gameState, commandName, args) {
     
   var commands = availableCommands(terminalState, gameState)
 
   if (!_.has(commands, commandName)) {
-    return terminalError(terminalState, gameState, "Command does not exist")
+    return ph.terminalError(terminalState, gameState, "Command does not exist")
   }
   else {
     return commands[commandName](terminalState, gameState, args)
   }
 }
 
-
 function availableCommands(terminalState, gameState) {
   return _.assign(terminalState.getIn(['program', 'commands']).toJS(), baseCommands)
 }
 
 function availablePrograms(terminalState, gameState) {
-  return programs  // for now, all programs are available.
+  return _.assign(programs, {main: mainProgram()})  // for now, all programs are available.
 }
 
-function terminalError(terminalState, gameState, errorText) {
-  return updatedState(terminalState, gameState, errorText)
-}
 
-function updatedState(terminalState, gameState, outputText) {
-  return {
-    newTerminalState: terminalState,
-    newGameState: gameState,
-    outputText: outputText
-  }
-}
 
 
 
@@ -51,29 +36,58 @@ function updatedState(terminalState, gameState, outputText) {
 //////////////////////
 
 
-function load(terminalState, gameState, args) {
-  var [programName] = args
-  if (!programName || !_.has(availablePrograms(terminalState, gameState), programName)) {
-    return terminalError(terminalState, gameState, "Program unavailable.")
-  } else {
-    var program = programs[programName]
-    return updatedState(
-      terminalState.set('program', Immutable.fromJS(program)),
-      gameState,
-      program.loadText
-    )
+function loadFunction(program) {
+  return function (terminalState, gameState) {
+    if (!_.has(availablePrograms(terminalState, gameState), program.name)) {
+      return ph.terminalError(terminalState, gameState, "Program unavailable.")
+    } else {
+      return ph.updates(
+        terminalState.set('program', Immutable.fromJS(program)),
+        gameState,
+        program.loadText(terminalState, gameState)
+      )
+    }
   }
 }
 
 function quit(terminalState, gameState) {
-  return load(terminalState, gameState, [programs.main.name])
+  return loadFunction(mainProgram())(terminalState, gameState)
 }
 
 function help(terminalState, gameState, args) {
   var [command] = args
   var commands = _.keys(availableCommands(terminalState, gameState)).join(", ")
-  return updatedState(terminalState, gameState, "Available commands: " + commands + " ")
+  return ph.updates(terminalState, gameState, "Available commands: " + commands + " ")
 }
 
-module.exports = exec
+
+////////////////////////
+// MAIN PROGRAM ////////
+////////////////////////
+
+function mainProgram() {  // We don't have main with the other programs to avoid weird dependencies (it's a little different)
+  
+  var commands = {
+    mail: loadFunction(programs.mail),
+    echo: echo,
+  }
+
+  return {
+    name: "main",
+    commands: commands,
+    isWorking: () => true,
+    loadText: () => "Welcome to Icarus 2.31.3 - Type 'help' for a list of available commands"
+  }
+
+  function echo (terminalState, gameState, text) {
+    return ph.updates(terminalState, gameState, text)
+  }
+}
+
+
+
+module.exports = {
+  run: run,
+  mainProgram: mainProgram,
+}
 
