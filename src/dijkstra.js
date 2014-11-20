@@ -87,7 +87,6 @@ function shortestPath(_graph, pointAId, pointBId) {
 }
 
 function formatPath(visiteds, finalPointId, firstPointId) {
-    console.log("visiteds", visiteds)
     var path = [firstPointId]
     var last
     while (true) {
@@ -95,7 +94,6 @@ function formatPath(visiteds, finalPointId, firstPointId) {
         if (last == finalPointId) break
         else path.push(visiteds[last])
     }
-    console.log("path", path)
     return path
 }
 

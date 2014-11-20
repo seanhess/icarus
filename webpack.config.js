@@ -15,6 +15,9 @@ module.exports = {
       { test: /\.jsx?$/,          loader: 'jsx-loader?harmony'                    },
       { test: /\.styl$/,          loader: 'style-loader!css-loader!stylus-loader' },
       { test: /\.(png|jpg|gif)$/, loader: 'url-loader?limit=8192'                 }
+    ],
+    postLoaders: [
+      { test: /\.jsx?$/,          loader: 'regenerator'                           },
     ]
   }
 };

@@ -22,8 +22,9 @@ Open index.html in browser.
 - [ ] separate exits from the text
 - [ ] disable links for objects in history, disable old buttons
 
-- [ ] put the history back in
-- [ ] try channels, try cursors in state functions
+- [x] put the history back in
+- [x] try channels
+- [ ] try cursors in state functions
 
 BIG STUFF
 

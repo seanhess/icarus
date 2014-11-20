@@ -22,7 +22,7 @@ var state = immstruct({
 var Window = component(function({game, terminal, program, buffer, command, isOpen, player}) {
 
   var lines = buffer.toArray().map(function(line) {
-    return <div>{line}</div>
+    return <div key={line}>{line}</div>
   })
 
   var programName = program.toJS().name

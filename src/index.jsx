@@ -7,6 +7,7 @@ var Game = require('./game')
 var Terminal = require('./terminal/Terminal')
 var Story = require('./story/Story')
 var History = require('./history')
+//var test = require('./test')
 
 var TERMINAL_WIDTH = 500
 
@@ -89,3 +90,4 @@ render();
 Terminal.state.on('swap', render);
 Game.state.on('swap',render);
 History.state.on('swap', render);
+

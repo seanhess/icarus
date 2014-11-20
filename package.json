@@ -21,13 +21,18 @@
     "gulp-livereload": "^2.1.1",
     "immstruct": "^1.1.0",
     "immutable": "^3.2.1",
+    "js-csp": "^0.3.2",
     "lodash": "^2.4.1",
     "moment": "^2.8.3",
     "omniscient": "^2.0.1",
     "react": "^0.12.0"
   },
   "devDependencies": {
+    "ast-types": "^0.6.5",
+    "cls": "^0.1.5",
     "jsx-loader": "^0.12.1",
+    "regenerator-loader": "^1.0.0",
+    "source-map": "^0.1.40",
     "webpack": "^1.4.13"
   }
 }

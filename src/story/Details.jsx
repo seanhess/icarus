@@ -9,8 +9,8 @@ var {showStyle} = require('../../lib/render')
 
 var Details = component(function({details}) {
   var elements = details.toArray().map(function(detail) {
-    return <span><a 
-      onClick={runTick(Player.inspect(detail))}>
+    return <span key={detail.get('id')}><a 
+      onClick={Game.onAction(Player.inspect(detail))}>
       {Ship.detailName(detail)}
     </a></span>
   })
@@ -33,18 +33,12 @@ var Focused = component(function({time, detail}) {
     </p>
 
     <p>
-      <div><a onClick={runTick(Player.lookAround())}>Look Around</a> </div>
-      <div><a style={showBreak} onClick={runTick(Player.detailBreak())}>Break it</a> </div>
-      <div><a style={showFix} onClick={runTick(Player.detailFix())}>Fix it </a> </div>
+      <div><a onClick={Game.onAction(Player.lookAround())}>Look Around</a> </div>
+      <div><a style={showBreak} onClick={Game.onAction(Player.detailBreak())}>Break it</a> </div>
+      <div><a style={showFix} onClick={Game.onAction(Player.detailFix())}>Fix it </a> </div>
     </p>
   </div>
 })
-
-function runTick(action) {
-  return function() {
-    Game.runTick(action)
-  }
-}
 
 exports.Main = Details
 exports.Focused = Focused

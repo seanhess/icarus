@@ -50,8 +50,6 @@ function moveTowardGoal(villain) {
 
 
 exports.isSeen = function(player, villain) {
-  console.log("TEST", villain.get('location'), player.get('room'))
-  console.log("UMM", villain.toJS())
   return player.get('room') == villain.get('location')
 }
 

@@ -10,6 +10,24 @@ var History = require('./history')
 
 var START_TIME = moment("2084-11-14T02:14Z")
 var TURN_DURATION = 60
+var csp = require("js-csp");
+
+
+var state   = exports.state   = immstruct(initialState())
+var actions = exports.actions = csp.chan()
+
+csp.go(function* () {
+  while (true) {
+    var action = yield csp.take(actions)
+    runTick(action)
+  }
+})
+
+exports.onAction = function(action) {
+  return function() {
+    csp.putAsync(actions, action)
+  }
+}
 
 // this file is the glue, has references to all the others?
 function initialState() {
@@ -37,9 +55,10 @@ function tick(playerAction, state) {
   })
 }
 
-exports.runTick = function(playerAction) {
+function runTick(playerAction) {
 
   var state = exports.state.cursor()
+  console.log("Run Tick", state.get('turn')+1)
 
   History.save(state)
 
@@ -47,6 +66,3 @@ exports.runTick = function(playerAction) {
     return tick(playerAction, oldState)
   })
 }
-
-exports.state = immstruct(initialState())
-
