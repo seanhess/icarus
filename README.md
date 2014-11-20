@@ -21,3 +21,13 @@ Open index.html in browser.
 
 - [ ] separate exits from the text
 - [ ] disable links for objects in history, disable old buttons
+
+- [ ] put the history back in
+- [ ] try channels, try cursors in state functions
+
+BIG STUFF
+
+- [ ] Simple AI that breaks things
+- [ ] You die if you take too much time
+- [ ] Program in the entire ship
+- [ ] The computer can do more as you fix things - missions

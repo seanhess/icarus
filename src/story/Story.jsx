@@ -12,7 +12,13 @@ var Time = require('./Time')
 var {showStyle} = require('../../lib/render')
 var {assign, map} = require('lodash')
 
-var StoryMain = component(function({game}) {
+var StoryMain = component(function({game, history}) {
+  
+  //var log = history.map(function(state) {
+    //return <PlayerView game={state}/>
+  //}).toArray().reverse()
+
+    //<div>{log}</div>
   return <div>
     <PlayerView game={game}/>
   </div>
