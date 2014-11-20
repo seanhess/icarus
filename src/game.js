@@ -57,18 +57,6 @@ function tick(playerAction, state) {
 
   playerAction(cursors)
   Villain.turn(cursors)
-
-  //var nextTurn = state.get('turn') + 1
-  //var nextTime = state.get('time').clone().add(TURN_DURATION*1000)
-
-  //var newState = state
-    //.update(playerAction)
-    //.update(Villain.turn)
-
-  //return newState.merge({
-    //turn: nextTurn,
-    //time: nextTime,
-  //})
 }
 
 function runTick(playerAction) {
@@ -79,10 +67,6 @@ function runTick(playerAction) {
   History.save(state)
 
   tick(playerAction, state)
-
-  //state.update(function(oldState) {
-    //return tick(playerAction, oldState)
-  //})
 }
 
 function roomKeyPath(game) {
