@@ -24,10 +24,12 @@ function availableCommands(terminalState, gameState) {
 }
 
 function availablePrograms(terminalState, gameState) {
-  return _.assign(programs, {main: mainProgram()})  // for now, all programs are available.
+  return allPrograms()  // for now, all programs are available.
 }
 
-
+function allPrograms() {
+  return _.assign(programs, {main: mainProgram()})
+}
 
 
 
@@ -35,20 +37,6 @@ function availablePrograms(terminalState, gameState) {
 /// BASE COMMANDS ////
 //////////////////////
 
-
-function loadFunction(program) {
-  return function (terminalState, gameState) {
-    if (!_.has(availablePrograms(terminalState, gameState), program.name)) {
-      return ph.terminalError(terminalState, gameState, "Program unavailable.")
-    } else {
-      return ph.updates(
-        terminalState.set('program', Immutable.fromJS(program)),
-        gameState,
-        program.loadText(terminalState, gameState)
-      )
-    }
-  }
-}
 
 function quit(terminalState, gameState) {
   return loadFunction(mainProgram())(terminalState, gameState)
@@ -84,6 +72,20 @@ function mainProgram() {  // We don't have main with the other programs to avoid
   }
 }
 
+
+function loadFunction(program) {
+  return function (terminalState, gameState) {
+    if (!_.has(availablePrograms(terminalState, gameState), program.name)) {
+      return ph.terminalError(terminalState, gameState, "Program unavailable.")
+    } else {
+      return ph.updates(
+        terminalState.set('program', Immutable.fromJS(program)),
+        gameState,
+        program.loadText(terminalState, gameState)
+      )
+    }
+  }
+}
 
 
 module.exports = {
