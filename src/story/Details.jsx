@@ -10,7 +10,6 @@ var {showStyle} = require('../../lib/render')
 var Details = component(function({details}) {
   var elements = details.toArray().map(function(detail) {
     return <span><a 
-      href="#"
       onClick={runTick(Player.inspect(detail))}>
       {Ship.detailName(detail)}
     </a></span>

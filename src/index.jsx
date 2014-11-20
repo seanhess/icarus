@@ -78,6 +78,9 @@ function render() {
     />,
     document.getElementById('main')
   )
+
+  //window.scrollTo(0,document.body.scrollHeight);
+  //window.scrollTop = window.scrollHeight
 }
 
 render();

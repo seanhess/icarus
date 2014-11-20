@@ -5,38 +5,23 @@ var cuid = require('cuid')
 
 // -- INITIAL ROOMS -------------------------------------------
 var bridge = roomCreate("bridge", "Bridge")
-bridge = roomAddDescription(bridge, [
-  "Smashed control wheels are everywhere and wires hang dangerously. You see the bridge is in poor condition.", 
-  ["The hallway is behind you", "hall"],
-])
+bridge = roomAddDescription(bridge, "Smashed control wheels are everywhere and wires hang dangerously. You see the bridge is in poor condition.")
 bridge = roomAddDetail(bridge, Terminal(null, [Broken()]))
 
 var hall = roomCreate("hall", "Hallway")
-hall = roomAddDescription(hall, [
-  "Red lights flicker along a steel catwalk. Steam fills the room.",
-  ["Some steps ascend to the bridge.","bridge"],
-  ["To your left a hatch opens into the crew quarters","crewQuarters"],
-  ["Behind you lies the engine room","engineRoom"],
-])
+hall = roomAddDescription(hall, "Red lights flicker along a steel catwalk. Steam fills the room.")
 //hall = roomAddObject(hall, {
   //name: "some twisted metal",
   //description: "",
 //})
 
 var crewQuarters = roomCreate("crewQuarters", "Crew Quarters")
-crewQuarters = roomAddDescription(crewQuarters, [
-  "Cryo tanks sit like blue pulsing tombs for the dead remains of your comrades.",
-  ["The door behind you opens into the hall", "hall"],
-])
+crewQuarters = roomAddDescription(crewQuarters, "Cryo tanks sit like blue pulsing tombs for the dead remains of your comrades.")
 exports.crewQuarters = crewQuarters
 
 var engineRoom = roomCreate("engineRoom", "Engine Room")
-engineRoom = roomAddDescription(engineRoom, [
-  "The quantum reactor spins at speeds unimaginable. It's hot in here.",
-  ["There is a door behind you.","hall"],
-])
+engineRoom = roomAddDescription(engineRoom, "The quantum reactor spins at speeds unimaginable. It's hot in here.")
 engineRoom = roomAddDetail(engineRoom, Terminal(null, []))
-
 
 // Connections are circular, define them last
 bridge = roomAddConnection(bridge, hall)
@@ -92,7 +77,10 @@ function roomAddDetail(room, obj) {
 function roomAddConnection(room, toRoom, properties) {
   return room.update("connections", (cns) => {
     var id = toRoom.get('id')
-    return cns.set(id, {id: id})
+    return cns.set(id, {
+      id: id, 
+      name: toRoom.get('name')
+    })
   })
 }
 
