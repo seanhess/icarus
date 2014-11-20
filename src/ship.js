@@ -6,7 +6,9 @@ var cuid = require('cuid')
 // -- INITIAL ROOMS -------------------------------------------
 var bridge = roomCreate("bridge", "Bridge")
 bridge = roomAddDescription(bridge, "Smashed control wheels are everywhere and wires hang dangerously. You see the bridge is in poor condition.")
-bridge = roomAddDetail(bridge, Terminal(null, [Broken()]))
+bridge = roomAddDetail(bridge, Terminal({broken: true}))
+
+console.log("BRIDGE", bridge.toJS())
 
 var hall = roomCreate("hall", "Hallway")
 hall = roomAddDescription(hall, "Red lights flicker along a steel catwalk. Steam fills the room.")
@@ -21,9 +23,9 @@ exports.crewQuarters = crewQuarters
 
 var engineRoom = roomCreate("engineRoom", "Engine Room")
 engineRoom = roomAddDescription(engineRoom, "The quantum reactor spins at speeds unimaginable. It's hot in here.")
-engineRoom = roomAddDetail(engineRoom, Terminal(null, []))
-engineRoom = roomAddDetail(engineRoom, Detail("fuel", "fuel line", [Disabled()]))
-engineRoom = roomAddDetail(engineRoom, Detail("pile", "pile of rubble", []))
+engineRoom = roomAddDetail(engineRoom, Terminal({broken: false}))
+engineRoom = roomAddDetail(engineRoom, Detail("engine", "engine", {disabled: true, broken: false}))
+engineRoom = roomAddDetail(engineRoom, Detail("pile", "pile of rubble", {}))
 
 // Connections are circular, define them last
 bridge = roomAddConnection(bridge, hall)
@@ -123,38 +125,20 @@ function roomsMap(rooms) {
 // can you pick this thing up?
 // it depends on what it is. what happens when you click it?
 
-function Terminal(name, properties) {
-  return Detail("terminal", name, properties)
+var TERMINAL = "terminal"
+
+function Terminal(properties) {
+  return Detail("terminal", "terminal", properties)
 }
 
 function Detail(type, name, properties) {
   return Immutable.fromJS({
     type: type, // terminal
     name: name || type, // terminal
-    properties: properties || [] // like broken
+    properties: properties || {} // like broken
   })
 }
 
-// the quick name for a detail
-function detailName(detail) {
-  if (!detail) return ""
-  //var adjectives = detail.get('properties').map(propertyName).toArray().join(", ")
-  //return "a " + adjectives + " " + detail.get('name')
-  return "a " + detail.get('name')
-}
-
-// for most objects, just say whether they are broken
-function detailDescription(detail) {
-  if (!detail) return ""
-  var properties = detail.get('properties')
-  if (properties.count() == 0) {
-    return "This " + detail.get("name") + " appears to be working properly"
-  }
-  else {
-    var adjectives = properties.map(propertyName).toArray().join(", ")
-    return "This " + detail.get("name") + " is " + adjectives
-  }
-}
 
 function detailEquals(d1, d2) {
   return d1.get('id') == d2.get('id')
@@ -175,46 +159,30 @@ function detailById(room, detailId) {
 }
 
 
-// Ok, these all MEAN something in the game
-// it's the description that changes things
-// this is all stuff you would notice at first glance
-function Broken(description) {
-  return Property("broken", description || "broken")
-}
+// -- PROPERTIES ----------------------------------------
+// set to true or false. it means they CAN be changed
+// broken: false
+// disabled: false
+// locked: false
 
-function Disabled(description) {
-  return Property("disabled", description || "disabled")
-}
+var BROKEN = "broken"
+var DISABLED = "disabled"
+var LOCKED = "locked"
 
-function Locked(description) {
-  return Property("locked", description || "locked")
-}
-
-function Property(name, description) {
-  return Immutable.fromJS({
-    name: name,
-    description: description
-  })
-}
-
-function propertyName(prop) {
-  return prop.get('name')
-}
+// oh but they need a name too?
+// but isn't that a condition of rendering?
+// we don't really want to define them by hand right now
 
 function detailIsEnabled(detail) {
   if (!detail) return false
-  // if properties are none of: broken, locked, disabled, etc :)
-  var badProps = detail.get('properties').filter(function(prop) {
-    var name = prop.get('name')
-    return name == "broken" || name == "disabled" || name == "locked"
-  })
 
-  return badProps.count() === 0
+  var props = detail.get('properties')
+  return !(props.get(BROKEN) || props.get(DISABLED) || props.get(LOCKED))
 }
 
 function detailIsBroken(detail) {
   if (!detail) return false
-  return detail.get('properties').filter((p) => p.get('name') == "broken").count() > 0
+  return detail.get(BROKEN)
 }
 
  //given a detail, provide
@@ -227,13 +195,14 @@ function detailIsBroken(detail) {
 
 exports.rooms = roomsMap([bridge, hall, crewQuarters, engineRoom]),
 exports.roomRawText = roomRawText
-exports.detailName = detailName
-exports.detailDescription = detailDescription
 exports.detailIsEnabled = detailIsEnabled
 exports.detailIndex = detailIndex
-exports.Broken = Broken
 exports.detailById = detailById
 exports.detailIsBroken = detailIsBroken
+exports.TERMINAL = TERMINAL
+exports.BROKEN = BROKEN
+exports.DISABLED = DISABLED
+exports.LOCKED = LOCKED
 
 // ------------------------------------------------------------------
 

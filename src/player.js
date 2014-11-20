@@ -35,15 +35,9 @@ exports.lookAround = function() {
 
 // I want to have the detail passed to me, but I need to know which one it was?
 // hmm... 
-exports.detailFix = function() {
+exports.detailChange = function(key, value) {
   return function({detail}) {
-    detail.set('properties', Immutable.List([]))
-  }
-}
-
-exports.detailBreak = function() {
-  return function({detail}) {
-    detail.update('properties', ds => ds.push(Ship.Broken()))
+    detail.update('properties', (props) => props.set(key, value))
   }
 }
 
