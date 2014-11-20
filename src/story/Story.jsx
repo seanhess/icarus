@@ -5,7 +5,6 @@ var Ship = require('../ship')
 var Game = require('../game')
 var Terminal = require('../terminal/Terminal')
 var Events = require('../events/events')
-var History = require('../history')
 var Player = require('../player')
 var Villain = require('../villain')
 var Details = require('./Details')
@@ -13,15 +12,11 @@ var Time = require('./Time')
 var {showStyle} = require('../../lib/render')
 var {assign, map} = require('lodash')
 
-var StoryMain = component(function({game, history}) {
+var StoryMain = component(function({game}) {
   return <div>
     <PlayerView game={game}/>
   </div>
 })
-
-
-// player view doesn't have everything? It's just the container?
-// this decides which page to display?
 
 var PlayerView = component(function({game}) {
   var player = game.get('player')
