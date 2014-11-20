@@ -25,7 +25,6 @@ var App = component(function({terminal, game, history}) {
       game={game}
     />
   </div>
-
 })
 
 
@@ -59,11 +58,14 @@ var StoryPanel = component(function({game, history}) {
 })
 
 var Debug = component(function({game}) {
+  var events = game.get('events')
   return <div>
     <h3>Player</h3>
     <p><pre><code>{JSON.stringify(game.get('player').toJS(), null, "  ")}</code></pre></p>
     <h3>Villain</h3>
     <p><pre><code>{JSON.stringify(game.get('villain').toJS(), null, "  ")}</code></pre></p>
+    <h3>Other</h3>
+    <p>{events.get('distanceToSunDoom')} {events.get('ending')}</p>
   </div>
 })
 

@@ -26,7 +26,7 @@ Open index.html in browser.
 - [x] try channels
 - [x] try cursors in state functions
 
-- [ ] fix that lame page thing
+- [x] fix that lame page thing
 
 TIMER: You die if you take too much time
 - [ ] distance to sun in state
