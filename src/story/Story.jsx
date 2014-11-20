@@ -34,19 +34,25 @@ var PlayerView = component(function({game}) {
     padding: 4
   }
 
-  var showDetails        = assign(showStyle(!detail))
-  var showFocusedDetails = showStyle(detail)
+  //var showDetails        = assign(showStyle(!detail))
+  //var showFocusedDetails = showStyle(detail)
+
+  var page;
+  if (detail) {
+    page = <div>
+      <Details.Focused time={game.get('time')} detail={detail}/>
+    </div>
+  }
+
+  else {
+    page = <div>
+      <PlayerRoomView room={room} player={player} villain={villain}/>
+    </div>
+  }
 
   return <div>
     <EntrySeparator room={room} time={game.get('time')} />
-    <div style={style}>
-      <div style={showDetails}>
-        <PlayerRoomView room={room} player={player} villain={villain}/>
-      </div>
-      <div style={showFocusedDetails}>
-        <Details.Focused time={game.get('time')} detail={detail}/>
-      </div>
-    </div>
+    <div style={style}>{page}</div>
   </div>
 })
 
@@ -65,9 +71,7 @@ var Exits = component(function({room}) {
     return <div>Exit - <a onClick={Game.onAction(Player.moveTo(id))}>{connection.name}</a></div>
   })
 
-  return <p>
-    <div>{exits}</div>
-  </p>
+  return <div>{exits}</div>
 })
 
 

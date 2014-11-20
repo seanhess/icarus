@@ -17,7 +17,7 @@ var Details = component(function({details}) {
   if (elements.length) {
     return <div>You see {elements}</div>
   }
-  return <span/>
+  return <div/>
 })
 
 var Focused = component(function({time, detail}) {
