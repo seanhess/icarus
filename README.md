@@ -29,10 +29,25 @@ Open index.html in browser.
 - [x] fix that lame page thing
 
 TIMER: You die if you take too much time
-- [ ] distance to sun in state
-- [ ] die when you get too close, end the game
+- [x] distance to sun in state
+- [x] die when you get too close, end the game
+
+YOU CAN FIX IT: the engine
+- [ ] the engine is disengaged
+- [ ] objects don't give details at the top level
+- [ ] you can re-engage it
+
+- [ ] the engine is broken
+- [ ] there are tools on the bridge
+- [ ] you can fix the engine
 
 SIMPLE AI: breaks things
+- [ ] once the engine is fixed, he heads there and breaks it
+- [ ] clues: different description if it is really broken (or re-broken?) sabotagued
+- [ ] if you get in the same room he kills you
+
+CLUES
+- [ ] noises
 
 SHIP: put it in
 

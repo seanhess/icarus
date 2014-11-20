@@ -22,6 +22,8 @@ exports.crewQuarters = crewQuarters
 var engineRoom = roomCreate("engineRoom", "Engine Room")
 engineRoom = roomAddDescription(engineRoom, "The quantum reactor spins at speeds unimaginable. It's hot in here.")
 engineRoom = roomAddDetail(engineRoom, Terminal(null, []))
+engineRoom = roomAddDetail(engineRoom, Detail("fuel", "fuel line", [Disabled()]))
+engineRoom = roomAddDetail(engineRoom, Detail("pile", "pile of rubble", []))
 
 // Connections are circular, define them last
 bridge = roomAddConnection(bridge, hall)
@@ -136,8 +138,22 @@ function Detail(type, name, properties) {
 // the quick name for a detail
 function detailName(detail) {
   if (!detail) return ""
-  var adjectives = detail.get('properties').map(propertyName).toArray().join(", ")
-  return "a " + adjectives + " " + detail.get('name')
+  //var adjectives = detail.get('properties').map(propertyName).toArray().join(", ")
+  //return "a " + adjectives + " " + detail.get('name')
+  return "a " + detail.get('name')
+}
+
+// for most objects, just say whether they are broken
+function detailDescription(detail) {
+  if (!detail) return ""
+  var properties = detail.get('properties')
+  if (properties.count() == 0) {
+    return "This " + detail.get("name") + " appears to be working properly"
+  }
+  else {
+    var adjectives = properties.map(propertyName).toArray().join(", ")
+    return "This " + detail.get("name") + " is " + adjectives
+  }
 }
 
 function detailEquals(d1, d2) {
@@ -212,6 +228,7 @@ function detailIsBroken(detail) {
 exports.rooms = roomsMap([bridge, hall, crewQuarters, engineRoom]),
 exports.roomRawText = roomRawText
 exports.detailName = detailName
+exports.detailDescription = detailDescription
 exports.detailIsEnabled = detailIsEnabled
 exports.detailIndex = detailIndex
 exports.Broken = Broken

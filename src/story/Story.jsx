@@ -49,7 +49,7 @@ var PlayerView = component(function({game}) {
   }
 
   return <div>
-    <EntrySeparator room={room} time={events.get('time')} />
+    <EntrySeparator room={room} time={events.get('time')} detail={detail}/>
     <div style={style}>{page}</div>
   </div>
 })
@@ -87,7 +87,7 @@ var VillainFound = component(function({player, villain}) {
   return <span/>
 })
 
-var EntrySeparator = component(function({time, room}) {
+var EntrySeparator = component(function({time, room, detail}) {
 
   var style = {
     backgroundColor: "#333",
@@ -95,11 +95,17 @@ var EntrySeparator = component(function({time, room}) {
     padding: 4,
   }
 
+  var detailInfo = ""
+  if (detail) {
+    detailInfo = " - " + detail.get('name')
+  }
+
   return <div style={style}>
     <div>
       <Time time={time}/>
       <span> - </span>
       <span>{room.get('name')}</span>
+      <span>{detailInfo}</span>
     </div>
   </div>
 })

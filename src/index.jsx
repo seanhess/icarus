@@ -40,8 +40,8 @@ var TerminalPanel = component(function({terminal, player, game}) {
     width: TERMINAL_WIDTH
   }
 
+    //<Debug game={game} />
   return <div style={terminalStyle}>
-    <Debug game={game} />
     <Terminal.Main terminal={terminal} player={player} game={game}/>
   </div>
 })
