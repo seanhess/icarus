@@ -19,15 +19,22 @@ Open index.html in browser.
 - [x] be able to look around after focusing ... list of actions
 - [x] add titles to the descriptions: The Bridge, The Engine Room
 
-- [ ] separate exits from the text
-- [ ] disable links for objects in history, disable old buttons
+- [x] separate exits from the text
+- [x] disable links for objects in history, disable old buttons
 
-- [ ] put the history back in
-- [ ] try channels, try cursors in state functions
+- [x] put the history back in
+- [x] try channels
+- [x] try cursors in state functions
 
-BIG STUFF
+- [ ] fix that lame page thing
 
-- [ ] Simple AI that breaks things
-- [ ] You die if you take too much time
-- [ ] Program in the entire ship
-- [ ] The computer can do more as you fix things - missions
+TIMER: You die if you take too much time
+- [ ] distance to sun in state
+- [ ] die when you get too close, end the game
+
+SIMPLE AI: breaks things
+
+SHIP: put it in
+
+COMPUTER: can do more as you fix things / missions
+

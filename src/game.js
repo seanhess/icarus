@@ -10,6 +10,24 @@ var History = require('./history')
 
 var START_TIME = moment("2084-11-14T02:14Z")
 var TURN_DURATION = 60
+var csp = require("js-csp");
+
+
+var state   = exports.state   = immstruct(initialState())
+var actions = exports.actions = csp.chan()
+
+csp.go(function* () {
+  while (true) {
+    var action = yield csp.take(actions)
+    runTick(action)
+  }
+})
+
+exports.onAction = function(action) {
+  return function() {
+    csp.putAsync(actions, action)
+  }
+}
 
 // this file is the glue, has references to all the others?
 function initialState() {
@@ -24,29 +42,40 @@ function initialState() {
 
 // so now everyone can update and be happy
 function tick(playerAction, state) {
-  var nextTurn = state.get('turn') + 1
-  var nextTime = state.get('time').clone().add(TURN_DURATION*1000)
+  
+  // try using cursors instead to make this easier
+  state.update('turn', t => t + 1)
+  state.update('time', t => t.clone().add(TURN_DURATION*1000))
 
-  var newState = state
-    .update(playerAction)
-    .update(Villain.turn)
+  var cursors = {
+    player:  state.cursor('player'),
+    villain: state.cursor('villain'),
+    detail:  state.cursor(detailKeyPath(state)),
+    room:    state.cursor(roomKeyPath(state)),
+    game:    state
+  }
 
-  return newState.merge({
-    turn: nextTurn,
-    time: nextTime,
-  })
+  playerAction(cursors)
+  Villain.turn(cursors)
 }
 
-exports.runTick = function(playerAction) {
+function runTick(playerAction) {
 
   var state = exports.state.cursor()
+  console.log("Run Tick", state.get('turn')+1)
 
   History.save(state)
 
-  state.update(function(oldState) {
-    return tick(playerAction, oldState)
-  })
+  tick(playerAction, state)
 }
 
-exports.state = immstruct(initialState())
+function roomKeyPath(game) {
+  var roomId = game.getIn(['player', 'room'])
+  return ['rooms', roomId]
+}
 
+function detailKeyPath(game) {
+  var roomId = game.getIn(['player', 'room'])
+  var detailId = game.getIn(['player', 'detail'])
+  return ['rooms', roomId, 'details', detailId]
+}

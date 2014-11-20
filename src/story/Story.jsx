@@ -15,7 +15,7 @@ var {assign, map} = require('lodash')
 var StoryMain = component(function({game, history}) {
   
   //var log = history.map(function(state) {
-    //return <PlayerView game={state}/>
+    //return <PlayerView game={state} key={state.get('turn')}/>
   //}).toArray().reverse()
 
     //<div>{log}</div>
@@ -34,19 +34,25 @@ var PlayerView = component(function({game}) {
     padding: 4
   }
 
-  var showDetails        = assign(showStyle(!detail))
-  var showFocusedDetails = showStyle(detail)
+  //var showDetails        = assign(showStyle(!detail))
+  //var showFocusedDetails = showStyle(detail)
+
+  var page;
+  if (detail) {
+    page = <div>
+      <Details.Focused time={game.get('time')} detail={detail}/>
+    </div>
+  }
+
+  else {
+    page = <div>
+      <PlayerRoomView room={room} player={player} villain={villain}/>
+    </div>
+  }
 
   return <div>
     <EntrySeparator room={room} time={game.get('time')} />
-    <div style={style}>
-      <div style={showDetails}>
-        <PlayerRoomView room={room} player={player} villain={villain}/>
-      </div>
-      <div style={showFocusedDetails}>
-        <Details.Focused time={game.get('time')} detail={detail}/>
-      </div>
-    </div>
+    <div style={style}>{page}</div>
   </div>
 })
 
@@ -62,12 +68,10 @@ var PlayerRoomView = component(function({room, player, villain}) {
 var Exits = component(function({room}) {
 
   var exits = map(room.get('connections').toJS(), function(connection, id) {
-    return <div>Exit - <a onClick={onClickMove(id)}>{connection.name}</a></div>
+    return <div>Exit - <a onClick={Game.onAction(Player.moveTo(id))}>{connection.name}</a></div>
   })
 
-  return <p>
-    <div>{exits}</div>
-  </p>
+  return <div>{exits}</div>
 })
 
 
@@ -94,14 +98,6 @@ var EntrySeparator = component(function({time, room}) {
     </div>
   </div>
 })
-
-
-function onClickMove(room) {
-  return function() {
-    var action = Player.moveTo(room)
-    Game.runTick(action)
-  }
-}
 
 
 exports.Main = StoryMain
