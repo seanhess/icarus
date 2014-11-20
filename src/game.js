@@ -6,6 +6,7 @@ var Player = require('./player')
 var Ship = require('./ship')
 var Events = require('./events/events')
 var Villain = require('./villain')
+var History = require('./history')
 
 var START_TIME = moment("2084-11-14T02:14Z")
 var TURN_DURATION = 60
@@ -39,6 +40,8 @@ function tick(playerAction, state) {
 exports.runTick = function(playerAction) {
 
   var state = exports.state.cursor()
+
+  History.save(state)
 
   state.update(function(oldState) {
     return tick(playerAction, oldState)

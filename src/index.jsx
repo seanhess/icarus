@@ -6,15 +6,17 @@ var component = require('../lib/component')
 var Game = require('./game')
 var Terminal = require('./terminal/Terminal')
 var Story = require('./story/Story')
+var History = require('./history')
 
 var TERMINAL_WIDTH = 500
 
 // App is a flex box container
-var App = component(function({terminal, game}) {
+var App = component(function({terminal, game, history}) {
   var appStyle = {}
   return <div style={appStyle}>
     <StoryPanel 
       game={game} 
+      history={history}
     />
     <TerminalPanel 
       terminal={terminal}
@@ -44,14 +46,14 @@ var TerminalPanel = component(function({terminal, player, game}) {
   </div>
 })
 
-var StoryPanel = component(function({game}) {
+var StoryPanel = component(function({game, history}) {
   var style = {
     backgroundColor: "green",
     marginRight: TERMINAL_WIDTH
   }
 
   return <div style={style}>
-    <Story.Main game={game}/>
+    <Story.Main game={game} history={history}/>
   </div>
 })
 
@@ -68,11 +70,13 @@ var Debug = component(function({game}) {
 function render() {
   var game     = Game.state.cursor()
   var terminal = Terminal.state.cursor()
+  var history = History.state.cursor()
 
   React.render( 
     <App 
       terminal={terminal} 
       game={game}
+      history={history}
     />,
     document.getElementById('main')
   )
@@ -84,3 +88,4 @@ function render() {
 render();
 Terminal.state.on('swap', render);
 Game.state.on('swap',render);
+History.state.on('swap', render);
