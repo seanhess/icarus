@@ -2,11 +2,11 @@ var React     = require('react')
 var component = require('../../lib/component')
 var intersperse = require('intersperse');
 
-var Ship = require('../ship/ship')
+var Ship = require('../ship')
 var {BROKEN, DISABLED, LOCKED, TERMINAL, COLLECTABLE} = require('../ship/details')
 
 var Game = require('../game')
-var Player = require('../player')
+var Player = require('../game/player')
 var Time = require('./Time')
 var {showStyle} = require('../../lib/render')
 

@@ -2,8 +2,8 @@ var Immutable = require('immutable')
 var immstruct = require('immstruct')
 
 var Player = require('./player')
-var Ship = require('./ship/ship')
-var Events = require('./events/events')
+var Ship = require('../ship')
+var Events = require('./events')
 var Villain = require('./villain')
 var History = require('./history')
 

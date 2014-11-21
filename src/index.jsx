@@ -7,7 +7,7 @@ var Game = require('./game')
 var Terminal = require('./terminal/Terminal')
 var Story = require('./story/Story')
 var Status = require('./status/Status')
-var History = require('./history')
+var History = require('./game/history')
 //var test = require('./test')
 
 var RIGHT_PANEL_WIDTH = 500

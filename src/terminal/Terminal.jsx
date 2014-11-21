@@ -5,8 +5,8 @@ var _         = require('lodash')
 
 var exec = require('./exec')
 
-var Ship = require('../ship/ship')
-var Player = require('../player')
+var Ship = require('../ship')
+var Player = require('../game/player')
 
 var cx = React.addons.classSet;
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;

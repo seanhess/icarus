@@ -1,8 +1,7 @@
 var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var dijkstra = require('./dijkstra')
-var Ship = require('./ship/ship')
-var Events = require('./events/events')
+var Ship = require('../ship')
 
 exports.initialState = function() {
   return Immutable.Map({
