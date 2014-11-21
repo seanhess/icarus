@@ -6,7 +6,7 @@ var component = require('../lib/component')
 var Game = require('./game')
 var Terminal = require('./terminal/Terminal')
 var Story = require('./story/Story')
-var Status = require('./status')
+var Status = require('./status/Status')
 var History = require('./history')
 //var test = require('./test')
 
