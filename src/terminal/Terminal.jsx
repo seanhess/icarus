@@ -42,12 +42,6 @@ var Window = component(function({game, terminal, program, buffer, command, isOpe
     'terminal-closed': !isOpen
   });
 
-  var style = {
-    position: 'absolute',
-    top: 0, left: 0, right: 0,
-    height: 400
-  }
-
   return <div className={classes}>
     <div>{lines}</div>
     <form onSubmit={onCommand}>
@@ -73,14 +67,23 @@ var Window = component(function({game, terminal, program, buffer, command, isOpe
 
 
 var Main = component(function({terminal, player, game}) {
-  return <Window 
-    player={player}
-    buffer={terminal.cursor('buffer')}
-    command={terminal.cursor('command')}
-    game={game}
-    terminal={terminal}
-    program={terminal.cursor('program')}
-  />
+
+  var style = {
+    fontFamily: "monospace",
+    backgroundColor: "black", 
+    color: "green",
+  }
+
+  return <div style={style}>
+    <Window 
+      player={player}
+      buffer={terminal.cursor('buffer')}
+      command={terminal.cursor('command')}
+      game={game}
+      terminal={terminal}
+      program={terminal.cursor('program')}
+    />
+  </div>
 })
 
 exports.Window = Window

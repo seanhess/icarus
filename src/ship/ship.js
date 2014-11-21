@@ -3,7 +3,7 @@ var Immutable = require('immutable')
 var cuid = require('cuid')
 
 var construction = require('./construction')
-var {TERMINAL, BROKEN, DISABLED, LOCKED} = require('./construction')
+var {TERMINAL, BROKEN, DISABLED, LOCKED} = require('./details')
 
 // -- INITIAL ROOMS -------------------------------------------
 
@@ -113,10 +113,6 @@ exports.detailIsEnabled = detailIsEnabled
 exports.detailIndex = detailIndex
 exports.detailById = detailById
 exports.detailIsBroken = detailIsBroken
-exports.TERMINAL = TERMINAL
-exports.BROKEN = BROKEN
-exports.DISABLED = DISABLED
-exports.LOCKED = LOCKED
 
 // ------------------------------------------------------------------
 

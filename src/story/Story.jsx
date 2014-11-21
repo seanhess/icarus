@@ -64,10 +64,11 @@ var Ending = component(function({ending}) {
 var PlayerRoomView = component(function({room, player, villain}) {
   return <div>
     <p>{room.get('description')}</p>
-    <p><Exits room={room}/></p>
-    <p><Details.Main details={room.cursor('details')}/></p>
     <p><VillainFound player={player} villain={villain}/></p>
+    <p><Details.Main details={room.cursor('details')}/></p>
+    <p><Exits room={room}/></p>
   </div>
+    //<p><pre>{JSON.stringify(room.toJS(), null, "  ")}</pre></p>
 })
 
 var Exits = component(function({room}) {

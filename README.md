@@ -33,9 +33,9 @@ TIMER: You die if you take too much time
 - [x] die when you get too close, end the game
 
 YOU CAN FIX IT: the engine
-- [ ] the engine is disengaged
-- [ ] objects don't give details at the top level
-- [ ] you can re-engage it
+- [x] the engine is disengaged
+- [x] objects don't give details at the top level
+- [x] you can re-engage it
 
 - [ ] the engine is broken
 - [ ] there are tools on the bridge

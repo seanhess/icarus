@@ -8,6 +8,7 @@ exports.initialState = function() {
   return Immutable.fromJS({
     room: Ship.portCryo.get('id'),
     detail: null, // the detail you are carefully looking at
+    inventory: [],
   })
 }
 
@@ -33,11 +34,20 @@ exports.lookAround = function() {
   }
 }
 
-// I want to have the detail passed to me, but I need to know which one it was?
-// hmm... 
 exports.detailChange = function(key, value) {
   return function({detail}) {
     detail.update('properties', (props) => props.set(key, value))
+  }
+}
+
+// you can only collect the detail you have focused
+exports.detailCollect = function() {
+  return function({detail, player, room}) {
+    room.update('details', (ds) => {
+      return ds.delete(detail.get('id'))
+    })
+
+    player.update('inventory', (items) => items.push(detail.deref()))
   }
 }
 

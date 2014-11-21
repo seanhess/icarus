@@ -3,7 +3,7 @@ var component = require('../../lib/component')
 var intersperse = require('intersperse');
 
 var Ship = require('../ship/ship')
-var {BROKEN, DISABLED, LOCKED, TERMINAL} = require('../ship/ship')
+var {BROKEN, DISABLED, LOCKED, TERMINAL, COLLECTABLE} = require('../ship/details')
 
 var Game = require('../game')
 var Player = require('../player')
@@ -26,16 +26,23 @@ var Details = component(function({details}) {
   return <div>You see {sentence}</div>
 })
 
+
+
+
+
 var Focused = component(function({time, detail}) {
 
   // show break if break: false
   var broken = detail.get(['properties', BROKEN])
   var disabled = detail.get(['properties', DISABLED])
+  var collectable = detail.get(['properties', COLLECTABLE])
 
   var showBreak   = showStyle(broken === false)
   var showFix     = showStyle(broken === true)
   var showDisable = showStyle(disabled === false)
   var showEnable  = showStyle(disabled === true)
+  var showCollect = showStyle(collectable === true)
+
 
   return <div>
     <p>{detailDescription(detail)}</p>
@@ -46,6 +53,7 @@ var Focused = component(function({time, detail}) {
       <div><a style={showFix}   onClick={detailFix}>Fix it </a> </div>
       <div><a style={showDisable} onClick={detailDisable}>Disable it</a> </div>
       <div><a style={showEnable}  onClick={detailEnable}>Enable it </a> </div>
+      <div><a style={showCollect}  onClick={detailCollect}>Take it </a> </div>
     </p>
 
   </div>
@@ -58,6 +66,7 @@ var detailBreak = Game.onAction(Player.detailChange(BROKEN, true))
 var detailFix   = Game.onAction(Player.detailChange(BROKEN, false))
 var detailDisable = Game.onAction(Player.detailChange(DISABLED, true))
 var detailEnable  = Game.onAction(Player.detailChange(DISABLED, false))
+var detailCollect = Game.onAction(Player.detailCollect())
 
 
 function toSentenceList(items) {
@@ -72,7 +81,6 @@ exports.Focused = Focused
 // the quick name for a detail
 function detailName(detail) {
   if (!detail) return ""
-    console.log("WOOT", detail.toJS())
   return "a " + detail.get('name')
 }
 

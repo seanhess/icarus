@@ -1,14 +1,7 @@
 var _ = require('lodash')
+var {TERMINAL, BROKEN, DISABLED, LOCKED, COLLECTABLE} = require("./details")
 
 /// The ship is constructed first in the mutable world to make it easier to connect things, etc.
-
-// CONSTANT LABELS
-
-var TERMINAL = "terminal"
-
-var BROKEN = "broken"
-var DISABLED = "disabled"
-var LOCKED = "locked"
 
 
 //////////////////////////
@@ -165,7 +158,7 @@ var portCryo = Room("portCryo", "Port Cryo Room",
 
     "There is also an old computer terminal access, opposite the center door.",
     [
-        Terminal(null, {broken: true}),
+        Terminal({broken: true}),
     ]
 )
 
@@ -225,7 +218,9 @@ var landerBridge = Room("landerBridge", "Lander Bridge",
 
     "There is a computer access terminal in the computer banks along the aft wall.",
     [
-        Terminal(null, {})
+        Terminal({broken: false}),
+        Detail("engine", "engine", {disabled: true, broken: false}),
+        Detail("pile", "pile of rubble", {}),
     ]
 )
 
@@ -280,7 +275,7 @@ biconnect(lowerGangplank, cargoHold)
 biconnect(lowerGangplank, orbiterRecreation)
 
 
-var rooms = _.indexBy([
+var rooms = exports.rooms = _.indexBy([
     orbiterStorage, orbiterMess, orbiterQuarters, orbiterRecreation, observationDeck, orbiterMedical, orbiterBridge,
     landerMess, starboardLanderQuarters, engineering, portLanderQuarters, cargoHold,
     portCryo, starboardCryo, cargoHoldCatwalk, landerMedical, landerRecreation, landerBridge,
@@ -306,8 +301,8 @@ function Room(id, name, description, details) {
 }
 
 
-function Terminal(name, properties) {
-  return Detail(TERMINAL, name, properties)
+function Terminal(properties) {
+  return Detail(TERMINAL, TERMINAL, properties)
 }
 
 function Detail(type, name, properties) {
@@ -332,12 +327,4 @@ function connect(fromRoom, toRoom) {
   }
 }
 
-
-module.exports = {
-    rooms: rooms,
-    TERMINAL: TERMINAL,
-    BROKEN: BROKEN,
-    DISABLED: DISABLED,
-    LOCKED: LOCKED,
-}
 

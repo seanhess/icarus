@@ -6,10 +6,11 @@ var component = require('../lib/component')
 var Game = require('./game')
 var Terminal = require('./terminal/Terminal')
 var Story = require('./story/Story')
+var Status = require('./status')
 var History = require('./history')
 //var test = require('./test')
 
-var TERMINAL_WIDTH = 500
+var RIGHT_PANEL_WIDTH = 500
 
 // App is a flex box container
 var App = component(function({terminal, game, history}) {
@@ -19,7 +20,7 @@ var App = component(function({terminal, game, history}) {
       game={game} 
       history={history}
     />
-    <TerminalPanel 
+    <RightPanel 
       terminal={terminal}
       player={game.cursor('player')}
       game={game}
@@ -27,29 +28,28 @@ var App = component(function({terminal, game, history}) {
   </div>
 })
 
+var RightPanel = component(function({terminal, player, game}) {
 
-var TerminalPanel = component(function({terminal, player, game}) {
-  var terminalStyle = {
-    fontFamily: "monospace",
-    backgroundColor: "black", 
-    color: "green",
+  var style = {
     position: "fixed",
     right: 0,
     top: 0,
     bottom: 0,
-    width: TERMINAL_WIDTH
+    width: RIGHT_PANEL_WIDTH
   }
 
-    //<Debug game={game} />
-  return <div style={terminalStyle}>
+
+  //<Debug game={game} />
+  return <div style={style}>
     <Terminal.Main terminal={terminal} player={player} game={game}/>
+    <Status player={player}/>
   </div>
 })
 
 var StoryPanel = component(function({game, history}) {
   var style = {
     backgroundColor: "green",
-    marginRight: TERMINAL_WIDTH
+    marginRight: RIGHT_PANEL_WIDTH
   }
 
   return <div style={style}>
