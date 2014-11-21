@@ -12,10 +12,11 @@ Open index.html in browser.
 - [x] "wait" command
 - [x] "back to"
 - [x] throw a weapon somewhere, if it's better you win
+- [ ] satisfying description when you enable or fix something
 
 AI 
-- [ ] clue: hear a noise when he is close
-- [ ] he tries to avoid you
+- [x] clue: hear a noise when he is close
+- [x] he tries to avoid you
 - [ ] clues: different description if it is really broken (or re-broken?) sabotagued
 - [ ] actions: can break all 4 systems
 

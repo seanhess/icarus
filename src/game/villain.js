@@ -21,7 +21,7 @@ exports.initialState = function() {
   })
 }
 
-exports.turn = function({villain, game}) {
+exports.turn = function({villain, game, player}) {
 
   if (villain.get('dead'))
     return
@@ -29,7 +29,7 @@ exports.turn = function({villain, game}) {
   // 1. calculate action based on state
   // 2. perform action
   var rooms = game.get('rooms')
-  var {move, action} = intendedAction(rooms, villain)
+  var {move, action} = intendedAction(rooms, villain, player)
 
   if (villain.get('room') == move) {
     // action
@@ -60,9 +60,28 @@ function moveTowardGoal(villain, rooms, goal) {
   }
 }
 
-function intendedAction(rooms, villain) {
+function avoid(rooms, path) {
+  // move to a random door, except the one towards the player
+  var badDoor = path[1]
+  var currentRoomId = path[0]
+  var exits = Object.keys(rooms.getIn([currentRoomId, "connections"]).toObject())
+  var validExits = exits.filter(e => e != badDoor)
+  return validExits[Math.floor(Math.random()*validExits.length)]
+}
+
+function intendedAction(rooms, villain, player) {
+
+  // first, run away
+  var path = dijkstra.pathToRoom(rooms, player.get('room'), villain.get('room'))
+  if (path.length <= 3) {
+     // right next to each other, or one away (same as hearing distance)
+     // except he could be moving straight towards you :(
+     return {move: avoid(rooms, path), action: actionAvoid}
+  }
+
   var engineering = rooms.get('engineering')
   var engine = engineering.cursor(Details.typeKeyPath(engineering, Details.ENGINE))
+
 
   if (Details.isWorking(engine)) {
     return {move: "engineering", action: actionBreak(engine)}
@@ -82,6 +101,10 @@ function actionBreak(detail) {
 
 function actionNothing(villain) {
   villain.set('action', ACTION_WAIT)
+}
+
+function actionAvoid(villain) {
+  villain.set('action', ACTION_MOVE)
 }
 
 
