@@ -54,3 +54,5 @@ SYSTEMS
 
 - [ ] closets, tool boxes, junk piles, etc. 
 - [ ] randomize tool locations
+
+- [ ] add a few dead ends in so you can corner him

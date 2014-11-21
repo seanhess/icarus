@@ -75,14 +75,14 @@ function intendedAction(rooms, villain, player) {
   var path = dijkstra.pathToRoom(rooms, player.get('room'), villain.get('room'))
   if (path.length <= 3) {
      // right next to each other, or one away (same as hearing distance)
-     // except he could be moving straight towards you :(
      return {move: avoid(rooms, path), action: actionAvoid}
   }
+
 
   var engineering = rooms.get('engineering')
   var engine = engineering.cursor(Details.typeKeyPath(engineering, Details.ENGINE))
 
-
+  // if something is working, go break it
   if (Details.isWorking(engine)) {
     return {move: "engineering", action: actionBreak(engine)}
   }
