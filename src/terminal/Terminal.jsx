@@ -5,7 +5,7 @@ var _         = require('lodash')
 
 var exec = require('./exec')
 
-var Ship = require('../ship')
+var Ship = require('../ship/ship')
 var Player = require('../player')
 
 var cx = React.addons.classSet;

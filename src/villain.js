@@ -1,13 +1,13 @@
 var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var dijkstra = require('./dijkstra')
-var Ship = require('./ship')
+var Ship = require('./ship/ship')
 var Events = require('./events/events')
 
 exports.initialState = function() {
   return Immutable.Map({
     location: Ship.rooms.getIn(["bridge", "id"]),
-    intention: Ship.rooms.getIn(["engineRoom", "id"])
+    intention: Ship.rooms.getIn(["engineering", "id"])
   })
 }
 

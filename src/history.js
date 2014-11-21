@@ -6,7 +6,7 @@ var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var moment = require('moment')
 var Events = require('./events/events')
-var Ship = require('./ship')
+var Ship = require('./ship/ship')
 
 // just has a bunch of strings in it for now
 var history = immstruct([])

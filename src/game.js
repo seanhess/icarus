@@ -3,7 +3,7 @@ var immstruct = require('immstruct')
 var moment = require('moment')
 
 var Player = require('./player')
-var Ship = require('./ship')
+var Ship = require('./ship/ship')
 var Events = require('./events/events')
 var Villain = require('./villain')
 var History = require('./history')

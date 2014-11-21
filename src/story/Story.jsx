@@ -1,7 +1,7 @@
 var React     = require('react')
 var component = require('../../lib/component')
 
-var Ship = require('../ship')
+var Ship = require('../ship/ship')
 var Game = require('../game')
 var Terminal = require('../terminal/Terminal')
 var Events = require('../events/events')
