@@ -159,6 +159,7 @@ var portCryo = Room("portCryo", "Port Cryo Room",
     "There is also an old computer terminal access, opposite the center door.",
     [
         Terminal({broken: true}),
+        Detail("sonic screwdriver", "sonic screwdriver", {collectable: true}),
     ]
 )
 
