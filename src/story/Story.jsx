@@ -41,7 +41,7 @@ var PlayerView = component(function({game}) {
   }
 
   else if (detail) {
-    page = <Details.Focused time={events.get('time')} detail={detail}/>
+    page = <Details.Focused time={events.get('time')} detail={detail} inventory={player.cursor('inventory')} />
   }
 
   else {
@@ -51,6 +51,7 @@ var PlayerView = component(function({game}) {
   return <div>
     <EntrySeparator room={room} time={events.get('time')} detail={detail}/>
     <div style={style}>{page}</div>
+    <div>{game.get('feedback')}</div>
   </div>
 })
 

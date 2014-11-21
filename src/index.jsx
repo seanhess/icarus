@@ -71,6 +71,7 @@ var Debug = component(function({game}) {
 
 
 function render() {
+  console.log("render")
   var game     = Game.state.cursor()
   var terminal = Terminal.state.cursor()
   var history = History.state.cursor()

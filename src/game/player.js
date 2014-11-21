@@ -64,3 +64,9 @@ exports.playerDetail = function(game, player) {
 exports.playerRoom = function(game, player) {
   return Ship.roomById(game, player.get('room'))
 }
+
+exports.hasItem = function(inventory, type) {
+  return inventory.toArray().filter(function(detail) {
+    return detail.get('type') == type
+  }).length > 0
+}

@@ -1,5 +1,5 @@
 var _ = require('lodash')
-var {TERMINAL, BROKEN, DISABLED, LOCKED, COLLECTABLE} = require("./details")
+var {TERMINAL, BROKEN, DISABLED, LOCKED, COLLECTABLE, TOOLS} = require("./details")
 
 /// The ship is constructed first in the mutable world to make it easier to connect things, etc.
 
@@ -159,7 +159,7 @@ var portCryo = Room("portCryo", "Port Cryo Room",
     "There is also an old computer terminal access, opposite the center door.",
     [
         Terminal({broken: true}),
-        Detail("sonic screwdriver", "sonic screwdriver", {collectable: true}),
+        Detail(TOOLS, "sonic screwdriver", {collectable: true}),
     ]
 )
 

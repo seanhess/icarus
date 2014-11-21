@@ -3,7 +3,7 @@ var component = require('../../lib/component')
 var intersperse = require('intersperse');
 
 var Ship = require('../ship')
-var {BROKEN, DISABLED, LOCKED, TERMINAL, COLLECTABLE} = require('../ship/details')
+var {BROKEN, DISABLED, LOCKED, TERMINAL, COLLECTABLE, TOOLS} = require('../ship/details')
 
 var Game = require('../game')
 var Player = require('../game/player')
@@ -28,9 +28,11 @@ var Details = component(function({details}) {
 
 
 
+// so, you can click fix it, but if you don't have the tools, it won't let you
+  // is that an action?
+  // how would I display it?
 
-
-var Focused = component(function({time, detail}) {
+var Focused = component(function({time, detail, inventory}) {
 
   // show break if break: false
   var broken = detail.get(['properties', BROKEN])
@@ -43,14 +45,13 @@ var Focused = component(function({time, detail}) {
   var showEnable  = showStyle(disabled === true)
   var showCollect = showStyle(collectable === true)
 
-
   return <div>
     <p>{detailDescription(detail)}</p>
 
     <p>
       <div><a onClick={lookAround}>Look Around</a> </div>
       <div><a style={showBreak} onClick={detailBreak}>Break it</a> </div>
-      <div><a style={showFix}   onClick={detailFix}>Fix it </a> </div>
+      <div><a style={showFix}   onClick={attemptFix(inventory)}>Fix it </a> </div>
       <div><a style={showDisable} onClick={detailDisable}>Disable it</a> </div>
       <div><a style={showEnable}  onClick={detailEnable}>Enable it </a> </div>
       <div><a style={showCollect}  onClick={detailCollect}>Take it </a> </div>
@@ -58,12 +59,21 @@ var Focused = component(function({time, detail}) {
 
   </div>
     //<p><pre>{JSON.stringify(detail.toJS(), null, "  ")}</pre></p>
-
 })
+
+var attemptFix = function(inventory) {
+  return function() {
+    if (Player.hasItem(inventory, TOOLS)) {
+      return Game.putAction(Player.detailChange(BROKEN, false))
+    }
+    else {
+      Game.showFeedback("You don't have any tools!")
+    }
+  }
+}
 
 var lookAround  = Game.onAction(Player.lookAround())
 var detailBreak = Game.onAction(Player.detailChange(BROKEN, true))
-var detailFix   = Game.onAction(Player.detailChange(BROKEN, false))
 var detailDisable = Game.onAction(Player.detailChange(DISABLED, true))
 var detailEnable  = Game.onAction(Player.detailChange(DISABLED, false))
 var detailCollect = Game.onAction(Player.detailCollect())

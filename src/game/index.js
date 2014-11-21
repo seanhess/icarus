@@ -21,8 +21,16 @@ csp.go(function* () {
 
 exports.onAction = function(action) {
   return function() {
-    csp.putAsync(actions, action)
+    exports.putAction(action)
   }
+}
+
+exports.putAction = function(action) {
+  csp.putAsync(actions, action)
+}
+
+exports.showFeedback = function(message) {
+  exports.state.cursor('feedback').update(() => message)
 }
 
 // this file is the glue, has references to all the others?
@@ -32,6 +40,7 @@ function initialState() {
     villain: Villain.initialState(),
     rooms: Ship.rooms,
     events: Events.initialState(),
+    feedback: "", 
   })
 }
 
@@ -49,6 +58,7 @@ function tick(playerAction, state) {
     game:    state
   }
 
+  state.cursor('feedback').update(() => "")
   Events.turn(cursors)
   playerAction(cursors)
   Villain.turn(cursors)
