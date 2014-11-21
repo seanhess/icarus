@@ -2,17 +2,13 @@ var _ = require('lodash')
 
 /// The ship is constructed first in the mutable world to make it easier to connect things, etc.
 
+// CONSTANT LABELS
 
 var TERMINAL = "terminal"
 
-
-// Ok, these all MEAN something in the game
-// it's the description that changes things
-// this is all stuff you would notice at first glance
 var BROKEN = "broken"
 var DISABLED = "disabled"
 var LOCKED = "locked"
-
 
 
 //////////////////////////

@@ -28,6 +28,34 @@ function roomById(state, id) {
 }
 
 // -- DETAILS -------------------------------------------------------
+// Details can be
+//  broken
+//  disabled
+//  we need a way to describe them differently depending on this stuff
+//  terminals can be unplugged
+//  data banks can be removed (find them and put them back)
+
+//  properties can be enabled or disabled
+//  they either contribute to the description or they don't
+//  change the properties and the description changes!
+
+
+// TYPES OF DETAILS
+// -- terminals
+//    pipes with blood on them
+//    tool: hydrospanner
+//    broken robot
+//    a lead pipe
+//    a knife
+//    a blaster
+//    data disks / banks / memory sticks
+//    motion sensors
+//    engine coolant valve
+//    "A terminal is glowing" -- special case!
+//    "A hyrdospanner with a cracked screen"
+
+// can you pick this thing up?
+// it depends on what it is. what happens when you click it?
 
 function detailEquals(d1, d2) {
   return d1.get('id') == d2.get('id')
@@ -53,9 +81,9 @@ function detailById(room, detailId) {
 // disabled: false
 // locked: false
 
-var BROKEN = "broken"
-var DISABLED = "disabled"
-var LOCKED = "locked"
+// Ok, these all MEAN something in the game
+// it's the description that changes things
+// this is all stuff you would notice at first glance
 
 // oh but they need a name too?
 // but isn't that a condition of rendering?
