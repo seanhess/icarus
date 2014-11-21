@@ -68,7 +68,6 @@ function tick(playerAction, state) {
 function runState(state, f) {
   var nextState = state
   var cursor = Cursor.from(nextState, [], function(newValue, oldValue, keyPath) {
-    console.log("SET", keyPath, newValue.getIn(keyPath))
     nextState = nextState.setIn(keyPath, newValue.getIn(keyPath))
   })
 

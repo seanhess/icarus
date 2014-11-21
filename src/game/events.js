@@ -11,7 +11,8 @@ exports.initialState = function() {
     turn: 0,
     time: START_TIME,
     distanceToSunDoom: 20,
-    event: null
+    event: null,
+    clue: null
   })
 }
 
@@ -31,20 +32,36 @@ var TRIGGER_HAPPY = 'You hear a noise behind you and turn swifty, in time to see
 // pass the new one in here?
 exports.checkGame = function({events, player, villain, game}) {
 
+  // set event!
   if (events.get('distanceToSunDoom') <= 0) {
     events.set('event', SUN_DOOM)
     player.set('dead', true)
   }
 
-  else if (!villain.get('dead') && Villain.isSeen(villain, player)) {
-    if (Villain.killsPlayer(villain, player)) {
-      events.set('event', ARROW_TO_THE_KNEE)
-      player.set('dead', true)
+  else if (!villain.get('dead')) {
+    if (Villain.isSeen(villain, player)) {
+      if (Villain.killsPlayer(villain, player)) {
+        events.set('event', ARROW_TO_THE_KNEE)
+        player.set('dead', true)
+      }
+      else {
+        events.set('event', TRIGGER_HAPPY)
+        villain.set('dead', true)
+      }
     }
-    else {
-      events.set('event', TRIGGER_HAPPY)
-      villain.set('dead', true)
-    }
+  }
+
+  // set clue!
+  var heardClue = Villain.heardClue(game.get('rooms'), villain, player)
+  if (!villain.get('dead') && heardClue) {
+    console.log("CLUE!", heardClue, villain.get("action"))
+    events.set('clue', Immutable.Map({
+      room: heardClue,
+      noise: villain.get('action')
+    }))
+  }
+  else {
+    events.set('clue', null)
   }
 }
 

@@ -11,21 +11,29 @@ Open index.html in browser.
 - [x] if you get in the same room he kills you
 - [x] "wait" command
 - [x] "back to"
-- [ ] throw a weapon somewhere, if it's better you win
+- [x] throw a weapon somewhere, if it's better you win
 
 AI 
 - [ ] clue: hear a noise when he is close
 - [ ] he tries to avoid you
 - [ ] clues: different description if it is really broken (or re-broken?) sabotagued
-
 - [ ] actions: can break all 4 systems
 
-SHIP: 
-- [ ] doors open and closed
+DOOR CONTROLS
+- [ ] fix them
+- [ ] add open and closed properties to doors
+- [ ] terminal program to control them
+
+EXTERNAL SENSORS
+- [ ] fix them
+- [ ] hint -> what's outside, what's going on
+- [ ] trajectory program: how long until you are toast, headed in the right direciton? etc...
+
+NAVIGATION SYSTEM
+- [ ] fix them
+- [ ] navigate program: set a course
 
 COMPUTER: can do more as you fix things / missions
-- [ ] doors: can lock and unlock doors
-- [ ] navigate: set a course
 - [ ] status: reports which systems are working
 - [ ] hint -> directs you to fix stuff
 - [ ] hint -> when something breaks
@@ -35,7 +43,6 @@ HOW TO WIN
 - [ ] enable all the systems
 - [ ] set a course
 - [ ] hold it for N turns
-
 
 SYSTEMS
 - [x] engine: required

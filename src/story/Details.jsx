@@ -57,8 +57,8 @@ var Focused = component(function({time, detail, inventory}) {
       <div><a style={showCollect}  onClick={detailCollect}>Take it </a> </div>
     </p>
 
+    <p><pre>{JSON.stringify(detail.toJS(), null, "  ")}</pre></p>
   </div>
-    //<p><pre>{JSON.stringify(detail.toJS(), null, "  ")}</pre></p>
 })
 
 var attemptFix = function(inventory) {
