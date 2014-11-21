@@ -17,8 +17,8 @@ var StoryMain = component(function({game, history}) {
   //var log = history.map(function(state) {
     //return <PlayerView game={state} key={state.get('turn')}/>
   //}).toArray().reverse()
+  //<div>{log}</div>
 
-    //<div>{log}</div>
   return <div>
     <PlayerView game={game}/>
   </div>
@@ -27,6 +27,7 @@ var StoryMain = component(function({game, history}) {
 var PlayerView = component(function({game}) {
   var player = game.get('player')
   var villain = game.get('villain')
+  var events = game.get('events')
   var room = Player.playerRoom(game, player)
   var detail = Player.playerDetail(game, player)
 
@@ -34,25 +35,29 @@ var PlayerView = component(function({game}) {
     padding: 4
   }
 
-  //var showDetails        = assign(showStyle(!detail))
-  //var showFocusedDetails = showStyle(detail)
-
   var page;
-  if (detail) {
-    page = <div>
-      <Details.Focused time={game.get('time')} detail={detail}/>
-    </div>
+  if (events.get('ending')) {
+    page = <Ending ending={events.get('ending')}/>
+  }
+
+  else if (detail) {
+    page = <Details.Focused time={events.get('time')} detail={detail}/>
   }
 
   else {
-    page = <div>
-      <PlayerRoomView room={room} player={player} villain={villain}/>
-    </div>
+    page = <PlayerRoomView room={room} player={player} villain={villain}/>
   }
 
   return <div>
-    <EntrySeparator room={room} time={game.get('time')} />
+    <EntrySeparator room={room} time={events.get('time')} detail={detail}/>
     <div style={style}>{page}</div>
+  </div>
+})
+
+var Ending = component(function({ending}) {
+  return <div>
+    <p>{ending}</p>
+    <p>THE END</p>
   </div>
 })
 
@@ -82,7 +87,7 @@ var VillainFound = component(function({player, villain}) {
   return <span/>
 })
 
-var EntrySeparator = component(function({time, room}) {
+var EntrySeparator = component(function({time, room, detail}) {
 
   var style = {
     backgroundColor: "#333",
@@ -90,11 +95,17 @@ var EntrySeparator = component(function({time, room}) {
     padding: 4,
   }
 
+  var detailInfo = ""
+  if (detail) {
+    detailInfo = " - " + detail.get('name')
+  }
+
   return <div style={style}>
     <div>
       <Time time={time}/>
       <span> - </span>
       <span>{room.get('name')}</span>
+      <span>{detailInfo}</span>
     </div>
   </div>
 })

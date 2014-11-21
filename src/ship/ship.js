@@ -3,6 +3,7 @@ var Immutable = require('immutable')
 var cuid = require('cuid')
 
 var construction = require('./construction')
+var {TERMINAL, BROKEN, DISABLED, LOCKED} = require('./construction')
 
 // -- INITIAL ROOMS -------------------------------------------
 
@@ -28,13 +29,6 @@ function roomById(state, id) {
 
 // -- DETAILS -------------------------------------------------------
 
-// the quick name for a detail
-function detailName(detail) {
-  if (!detail) return ""
-  var adjectives = detail.get('properties').map(propertyName).toArray().join(", ")
-  return "a " + adjectives + " " + detail.get('name')
-}
-
 function detailEquals(d1, d2) {
   return d1.get('id') == d2.get('id')
 }
@@ -53,24 +47,30 @@ function detailById(room, detailId) {
   })
 }
 
-function propertyName(prop) {
-  return prop.get('name')
-}
+// -- PROPERTIES ----------------------------------------
+// set to true or false. it means they CAN be changed
+// broken: false
+// disabled: false
+// locked: false
+
+var BROKEN = "broken"
+var DISABLED = "disabled"
+var LOCKED = "locked"
+
+// oh but they need a name too?
+// but isn't that a condition of rendering?
+// we don't really want to define them by hand right now
 
 function detailIsEnabled(detail) {
   if (!detail) return false
-  // if properties are none of: broken, locked, disabled, etc :)
-  var badProps = detail.get('properties').filter(function(prop) {
-    var name = prop.get('name')
-    return name == "broken" || name == "disabled" || name == "locked"
-  })
 
-  return badProps.count() === 0
+  var props = detail.get('properties')
+  return !(props.get(BROKEN) || props.get(DISABLED) || props.get(LOCKED))
 }
 
 function detailIsBroken(detail) {
   if (!detail) return false
-  return detail.get('properties').filter((p) => p.get('name') == "broken").count() > 0
+  return detail.get(BROKEN)
 }
 
 
@@ -78,15 +78,17 @@ function detailIsBroken(detail) {
 
 
 exports.rooms = rooms
-exports.portCryo = rooms.get("portCryo")
 exports.roomRawText = roomRawText
 exports.roomById = roomById
-exports.detailName = detailName
+exports.portCryo = rooms.get("portCryo")
 exports.detailIsEnabled = detailIsEnabled
 exports.detailIndex = detailIndex
-exports.Broken = construction.Broken  // note, this returns json. may need to wrap in immutable.
 exports.detailById = detailById
 exports.detailIsBroken = detailIsBroken
+exports.TERMINAL = TERMINAL
+exports.BROKEN = BROKEN
+exports.DISABLED = DISABLED
+exports.LOCKED = LOCKED
 
 // ------------------------------------------------------------------
 

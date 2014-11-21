@@ -2,6 +2,19 @@ var _ = require('lodash')
 
 /// The ship is constructed first in the mutable world to make it easier to connect things, etc.
 
+
+var TERMINAL = "terminal"
+
+
+// Ok, these all MEAN something in the game
+// it's the description that changes things
+// this is all stuff you would notice at first glance
+var BROKEN = "broken"
+var DISABLED = "disabled"
+var LOCKED = "locked"
+
+
+
 //////////////////////////
 /// ORBITER //////////////
 //////////////////////////
@@ -156,7 +169,7 @@ var portCryo = Room("portCryo", "Port Cryo Room",
 
     "There is also an old computer terminal access, opposite the center door.",
     [
-        Terminal(null, [Broken()]),
+        Terminal(null, {broken: true}),
     ]
 )
 
@@ -216,7 +229,7 @@ var landerBridge = Room("landerBridge", "Lander Bridge",
 
     "There is a computer access terminal in the computer banks along the aft wall.",
     [
-        Terminal(null, [])
+        Terminal(null, {})
     ]
 )
 
@@ -296,6 +309,11 @@ function Room(id, name, description, details) {
     }
 }
 
+
+
+
+
+
 // Details can be
 //  broken
 //  disabled
@@ -325,37 +343,17 @@ function Room(id, name, description, details) {
 // can you pick this thing up?
 // it depends on what it is. what happens when you click it?
 
+// Details
+
 function Terminal(name, properties) {
-  return Detail("terminal", name, properties)
+  return Detail(TERMINAL, name, properties)
 }
 
 function Detail(type, name, properties) {
   return {
     type: type, // terminal
     name: name || type, // terminal
-    properties: properties || [] // like broken
-  }
-}
-
-// Ok, these all MEAN something in the game
-// it's the description that changes things
-// this is all stuff you would notice at first glance
-function Broken(description) {
-  return Property("broken", description || "broken")
-}
-
-function Disabled(description) {
-  return Property("disabled", description || "disabled")
-}
-
-function Locked(description) {
-  return Property("locked", description || "locked")
-}
-
-function Property(name, description) {
-  return {
-    name: name,
-    description: description
+    properties: properties || {} // like broken
   }
 }
 
@@ -376,6 +374,9 @@ function connect(fromRoom, toRoom) {
 
 module.exports = {
     rooms: rooms,
-    Broken: Broken
+    TERMINAL: TERMINAL,
+    BROKEN: BROKEN,
+    DISABLED: DISABLED,
+    LOCKED: LOCKED,
 }
 
