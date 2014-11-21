@@ -25,6 +25,7 @@ var App = component(function({terminal, game, history}) {
       player={game.cursor('player')}
       game={game}
     />
+    <pre>{debugVillain(game)}</pre>
   </div>
 })
 
@@ -68,6 +69,10 @@ var Debug = component(function({game}) {
     <p>{events.get('distanceToSunDoom')} {events.get('ending')}</p>
   </div>
 })
+
+function debugVillain(game) {
+  return "VILLAIN\n"+JSON.stringify(game.get('villain').toJS(), null, "  ")
+}
 
 
 function render() {

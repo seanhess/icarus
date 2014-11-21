@@ -37,16 +37,17 @@ YOU CAN FIX IT: the engine
 - [x] objects don't give details at the top level
 - [x] you can re-engage it
 
-- [ ] if you have tools you can fix things, but not otherwise
-
-- [ ] the engine is broken
-- [ ] there are tools on the bridge
-- [ ] you can fix the engine
+- [x] if you have tools you can fix things, but not otherwise
 
 SIMPLE AI: breaks things
 - [ ] once the engine is re-engaged, he heads there and breaks it
 - [ ] clues: different description if it is really broken (or re-broken?) sabotagued
 - [ ] if you get in the same room he kills you
+
+- [ ] the engine is broken
+- [ ] there are tools on the bridge
+- [ ] you can fix the engine
+
 
 
 CLUES

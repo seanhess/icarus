@@ -6,6 +6,7 @@ var _         = require('lodash')
 var exec = require('./exec')
 
 var Ship = require('../ship')
+var Details = require('../ship/details')
 var Player = require('../game/player')
 
 var cx = React.addons.classSet;
@@ -119,8 +120,8 @@ function runCommand(terminalState, gameState, commandText) {
 function isTerminalOpen(detail) {
   if (!detail) return false
   return (
-    detail.get('type') == "terminal" && 
-    Ship.detailIsEnabled(detail)
+    detail.get('type') == Details.TERMINAL && 
+    Details.isWorking(detail)
   )
 }
 

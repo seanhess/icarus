@@ -2,18 +2,20 @@ var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var dijkstra = require('./dijkstra')
 var Ship = require('../ship')
+var Details = require('../ship/details')
 
 exports.initialState = function() {
   return Immutable.Map({
-    location: Ship.rooms.getIn(["bridge", "id"]),
-    intention: Ship.rooms.getIn(["engineering", "id"])
+    location: Ship.rooms.getIn(["orbiterBridge", "id"])
   })
 }
 
 exports.turn = function({villain, game}) {
   // 1. calculate action based on state
   // 2. perform action
-  var move = moveTowardGoal(villain, game.get('rooms'))
+  var rooms = game.get('rooms')
+  var goal = intendedRoom(rooms, villain)
+  var move = moveTowardGoal(villain, rooms, goal)
   villain.update('location', move)
 }
 
@@ -25,14 +27,31 @@ function randomMove(villain) {
   }
 }
 
-function moveTowardGoal(villain, rooms) {
+function moveTowardGoal(villain, rooms, goal) {
   var currentRoom = villain.get("location")
-  var intendedRoom = villain.get("intention")
-  var nextRoomId = dijkstra.nextRoomToDestination(rooms, currentRoom, intendedRoom)
+  var nextRoomId = dijkstra.nextRoomToDestination(rooms, currentRoom, goal)
   return function(l) {
     return nextRoomId
   }
 }
+
+function intendedRoom(rooms, villain) {
+  var engineering = rooms.get('engineering')
+
+  var engine = engineering.getIn(Details.typeKeyPath(engineering, Details.ENGINE))
+
+  if (Details.isWorking(engine)) {
+    return "engineering"
+  }
+  else {
+    return "orbiterBridge"
+  }
+
+}
+
+//function engineKeyPath(rooms) {
+  //return ["engineering", "details", detailId]
+//}
 
 //var villain = immstruct({
   //action: {

@@ -1,5 +1,5 @@
 var _ = require('lodash')
-var {TERMINAL, BROKEN, DISABLED, LOCKED, COLLECTABLE, TOOLS} = require("./details")
+var {TERMINAL, BROKEN, DISABLED, LOCKED, COLLECTABLE, TOOLS, ENGINE} = require("./details")
 
 /// The ship is constructed first in the mutable world to make it easier to connect things, etc.
 
@@ -104,7 +104,9 @@ var engineering = Room("engineering", "Engineering",
     "materials signs stand clustered in one corner. There are three doors along the fore wall: port, center, and aft. "+
     "Next to the center door you see a ladder leading upward. There are several computer access terminals among the more "+
     "esoteric control stations.",
-    []
+    [
+      Detail("engine", "engine", {broken: false, disabled: true})
+    ]
 )
 
 var portLanderQuarters = Room("portLanderQuarters", "Port Lander Quarters",
@@ -220,7 +222,7 @@ var landerBridge = Room("landerBridge", "Lander Bridge",
     "There is a computer access terminal in the computer banks along the aft wall.",
     [
         Terminal({broken: false}),
-        Detail("engine", "engine", {disabled: true, broken: false}),
+        Detail(ENGINE, "engine", {disabled: true, broken: false}),
         Detail("pile", "pile of rubble", {}),
     ]
 )
