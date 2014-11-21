@@ -38,22 +38,34 @@ YOU CAN FIX IT: the engine
 - [x] you can re-engage it
 
 - [x] if you have tools you can fix things, but not otherwise
+- [x] the engine is broken
+- [x] there are tools on the bridge
+- [x] you can fix the engine
 
 SIMPLE AI: breaks things
-- [ ] once the engine is re-engaged, he heads there and breaks it
-- [ ] clues: different description if it is really broken (or re-broken?) sabotagued
+- [x] once the engine is re-engaged, he heads there and breaks it
+
+AI 
+- [ ] clue: hear a noise when he is close
 - [ ] if you get in the same room he kills you
+- [ ] he tries to avoid you
+- [ ] clues: different description if it is really broken (or re-broken?) sabotagued
+- [ ] break: the navigation system
+- [ ] break: the sensors
 
-- [ ] the engine is broken
-- [ ] there are tools on the bridge
-- [ ] you can fix the engine
-
-
-
-CLUES
-- [ ] noises
-
-SHIP: put it in
+SHIP: 
+- [ ] doors open and closed
 
 COMPUTER: can do more as you fix things / missions
+- [ ] can lock and unlock doors
+- [ ] command: set a course
+- [ ] fix: sensors -> status sun! aliens!
+
+TO THE FINISH LINE
+- [ ] fix: engine
+- [ ] fix: AI's connection to navigation system
+- [ ] command: tell the AI to set a course
+- [ ] N turns going up and you win
+
+- [ ] throw a weapon somewhere
 
