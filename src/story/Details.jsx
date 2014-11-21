@@ -63,7 +63,7 @@ var Focused = component(function({time, detail, inventory}) {
 
 var attemptFix = function(inventory) {
   return function() {
-    if (Player.hasItem(inventory, TOOLS)) {
+    if (Player.itemOfType(inventory, TOOLS)) {
       return Game.putAction(Player.detailChange(BROKEN, false))
     }
     else {

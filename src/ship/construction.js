@@ -1,5 +1,5 @@
 var _ = require('lodash')
-var {TERMINAL, BROKEN, DISABLED, LOCKED, COLLECTABLE, TOOLS, ENGINE} = require("./details")
+var {TERMINAL, BROKEN, DISABLED, LOCKED, COLLECTABLE, TOOLS, ENGINE, WEAPON} = require("./details")
 
 /// The ship is constructed first in the mutable world to make it easier to connect things, etc.
 
@@ -126,7 +126,8 @@ var cargoHold = Room("cargoHold", "Cargo Hold",
     "fore-port corner.  The three ladders are spaced through the room, one to the fore, one in the center, and one aft. "+
     "The center ladder continues to rise above the catwalk, leading to a hatch in the ceiling, with an identical hatch on "+ 
     "the floor at the foot of the ladder.",
-    []
+    [
+    ]
 )
 
 
@@ -223,6 +224,7 @@ var landerBridge = Room("landerBridge", "Lander Bridge",
     [
         Terminal({broken: false}),
         Detail("pile", "pile of rubble", {}),
+        Detail(WEAPON, "pistol", {weapon: 2, collectable: true}),
     ]
 )
 

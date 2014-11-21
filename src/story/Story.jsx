@@ -36,8 +36,8 @@ var PlayerView = component(function({game}) {
   }
 
   var page;
-  if (events.get('ending')) {
-    page = <Ending ending={events.get('ending')}/>
+  if (events.get('event')) {
+    page = <Event event={events.get('event')} player={player}/>
   }
 
   else if (detail) {
@@ -55,37 +55,55 @@ var PlayerView = component(function({game}) {
   </div>
 })
 
-var Ending = component(function({ending}) {
+var Event = component(function({event, player}) {
+  // if you are dead
+
+  var controls;
+  if (player.get('dead')) {
+    controls = <span>THE END</span>
+  }
+  else {
+    controls = <span><a onClick={Game.onAction(Player.lookAround())}>Look Around</a></span>
+  }
+
   return <div>
-    <p>{ending}</p>
-    <p>THE END</p>
+    <p>{event}</p>
+    <p>{controls}</p>
   </div>
 })
 
 var PlayerRoomView = component(function({room, player, villain}) {
   return <div>
     <p>{room.get('description')}</p>
-    <p><VillainFound player={player} villain={villain}/></p>
     <p><Details.Main details={room.cursor('details')}/></p>
-    <p><Exits room={room}/></p>
+    <p><VillainFound player={player} villain={villain}/></p>
+    <p><Exits room={room} player={player}/></p>
+    <p><a onClick={Game.onAction(Player.wait())}>Wait</a></p>
   </div>
     //<p><pre>{JSON.stringify(room.toJS(), null, "  ")}</pre></p>
 })
 
-var Exits = component(function({room}) {
+var Exits = component(function({room, player}) {
+
+  function isBack(player, roomId) {
+    return player.get('lastRoom') == roomId
+  }
 
   var exits = map(room.get('connections').toJS(), function(connection, id) {
-    return <div>Exit - <a onClick={Game.onAction(Player.moveTo(id))}>{connection.name}</a></div>
+    var label = (isBack(player, id)) ? "Back" : "Go"
+    return <div>{label} - <a onClick={Game.onAction(Player.moveTo(id))}>{connection.name}</a></div>
   })
 
   return <div>{exits}</div>
 })
 
-
 var VillainFound = component(function({player, villain}) {
-  if (Villain.isSeen(player, villain)) {
-    return <span>You see the bad guy</span>
+
+  // only should see him if he's dead
+  if (Villain.isSeen(villain, player)) {
+    return <span>The body of the Captain lies on the ground, eyes manic even in death.</span>
   }
+
   return <span/>
 })
 

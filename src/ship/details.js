@@ -3,6 +3,7 @@
 exports.TERMINAL  = "terminal"
 exports.TOOLS     = "tools"
 exports.ENGINE    = "engine"
+exports.WEAPON    = "weapon"
 
 // Properties
 exports.BROKEN      = "broken"

@@ -25,7 +25,7 @@ var App = component(function({terminal, game, history}) {
       player={game.cursor('player')}
       game={game}
     />
-    <pre>{debugVillain(game)}</pre>
+    <pre>{debug('VILLAIN', game.get('villain'))} {debug('EVENTS', game.get('events'))}</pre>
   </div>
 })
 
@@ -65,15 +65,12 @@ var Debug = component(function({game}) {
     <p><pre><code>{JSON.stringify(game.get('player').toJS(), null, "  ")}</code></pre></p>
     <h3>Villain</h3>
     <p><pre><code>{JSON.stringify(game.get('villain').toJS(), null, "  ")}</code></pre></p>
-    <h3>Other</h3>
-    <p>{events.get('distanceToSunDoom')} {events.get('ending')}</p>
   </div>
 })
 
-function debugVillain(game) {
-  return "VILLAIN\n"+JSON.stringify(game.get('villain').toJS(), null, "  ")
+function debug(name, item) {
+  return "\n"+name+"\n"+JSON.stringify(item.toJS(), null, "  ")
 }
-
 
 function render() {
   //console.log("render")

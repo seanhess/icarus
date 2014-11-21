@@ -3,14 +3,24 @@ var immstruct = require('immstruct')
 var dijkstra = require('./dijkstra')
 var Ship = require('../ship')
 var Details = require('../ship/details')
+var Player = require('./player')
+
+//var startingRoom = "orbiterBridge"
+var startingRoom = "starboardCryo"
 
 exports.initialState = function() {
   return Immutable.Map({
-    location: Ship.rooms.getIn(["orbiterBridge", "id"])
+    location: Ship.rooms.getIn([startingRoom, "id"]),
+    weapon: 1,
+    dead: false
   })
 }
 
 exports.turn = function({villain, game}) {
+
+  if (villain.get('dead'))
+    return
+
   // 1. calculate action based on state
   // 2. perform action
   var rooms = game.get('rooms')
@@ -56,7 +66,7 @@ function intendedAction(rooms, villain) {
     return {move: "engineering", action: actionBreak(engine)}
   }
   else {
-    return {move: "orbiterBridge", action: actionNothing}
+    return {move: startingRoom, action: actionNothing}
   }
 }
 
@@ -70,6 +80,7 @@ function actionBreak(detail) {
 function actionNothing() {
 
 }
+
 
 //function engineKeyPath(rooms) {
   //return ["engineering", "details", detailId]
@@ -86,8 +97,14 @@ function actionNothing() {
 
 //exports.state = villain
 
+exports.killsPlayer = function(villain, player) {
+  console.log("CHECK", player.toJS())
+  var weapon = Player.itemOfType(player.get('inventory'), Details.WEAPON)
+  if (!weapon) return true
+  return weapon.getIn(['properties', 'weapon']) <= villain.get('weapon')
+}
 
-exports.isSeen = function(player, villain) {
+exports.isSeen = function(villain, player) {
   return player.get('room') == villain.get('location')
 }
 

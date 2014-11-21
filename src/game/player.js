@@ -1,14 +1,16 @@
 var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var Ship = require('../ship')
-var {curry} = require('lodash')
+var {curry, find} = require('lodash')
 var Details = require('../ship/details')
 
 exports.initialState = function() {
   return Immutable.fromJS({
     room: Ship.portCryo.get('id'),
+    lastRoom: null,
     detail: null, // the detail you are carefully looking at
     inventory: [],
+    dead: false
   })
 }
 
@@ -18,6 +20,7 @@ exports.initialState = function() {
 
 exports.moveTo = function(roomId) {
   return function({player}) {
+    player.set('lastRoom', player.get('room'))
     player.set('room', roomId)
   }
 }
@@ -29,8 +32,9 @@ exports.inspect = function(detail) {
 }
 
 exports.lookAround = function() {
-  return function({player}) {
+  return function({player, events}) {
     player.set('detail', null)
+    events.set('event', null)
   }
 }
 
@@ -51,6 +55,12 @@ exports.detailCollect = function() {
   }
 }
 
+exports.wait = function() {
+  return function() {
+
+  }
+}
+
 
 
 // -- QUERY ------------------------------------------------------------
@@ -66,8 +76,8 @@ exports.playerRoom = function(game, player) {
   return Ship.roomById(game, player.get('room'))
 }
 
-exports.hasItem = function(inventory, type) {
-  return inventory.toArray().filter(function(detail) {
+exports.itemOfType = function(inventory, type) {
+  return find(inventory.toArray(), function(detail) {
     return detail.get('type') == type
-  }).length > 0
+  })
 }

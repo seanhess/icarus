@@ -1,4 +1,5 @@
 var Immutable = require('immutable')
+var Cursor    = require('immutable/contrib/cursor')
 var immstruct = require('immstruct')
 
 var Player = require('./player')
@@ -47,9 +48,37 @@ function initialState() {
 // so now everyone can update and be happy
 function tick(playerAction, state) {
 
-  console.log("Run Tick", state.get(['events','turn'])+1)
-  
-  var cursors = {
+  console.log("Run Tick", state.getIn(['events','turn'])+1)
+
+  var next = runState(state, function(state) {
+    var cursors = tickCursors(state)
+    state.cursor('feedback').update(() => "")
+    playerAction(cursors)
+    Events.turn(cursors)
+    Villain.turn(cursors)
+  })
+
+  var checked = runState(next, function(state) {
+    Events.checkGame(tickCursors(state))
+  })
+
+  return checked
+}
+
+function runState(state, f) {
+  var nextState = state
+  var cursor = Cursor.from(nextState, [], function(newValue, oldValue, keyPath) {
+    console.log("SET", keyPath, newValue.getIn(keyPath))
+    nextState = nextState.setIn(keyPath, newValue.getIn(keyPath))
+  })
+
+  f(cursor)
+
+  return nextState
+}
+
+function tickCursors(state) {
+  return {
     player:  state.cursor('player'),
     villain: state.cursor('villain'),
     events:  state.cursor('events'),
@@ -57,20 +86,13 @@ function tick(playerAction, state) {
     room:    state.cursor(roomKeyPath(state)),
     game:    state
   }
-
-  state.cursor('feedback').update(() => "")
-  Events.turn(cursors)
-  playerAction(cursors)
-  Villain.turn(cursors)
 }
 
 function runTick(playerAction) {
-
-  var state = exports.state.cursor()
-
+  var state = exports.state.cursor().deref()
   History.save(state)
-
-  tick(playerAction, state)
+  var nextState = tick(playerAction, state)
+  exports.state.cursor().update(() => nextState)
 }
 
 function roomKeyPath(game) {
