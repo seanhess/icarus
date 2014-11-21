@@ -14,9 +14,21 @@ exports.turn = function({villain, game}) {
   // 1. calculate action based on state
   // 2. perform action
   var rooms = game.get('rooms')
-  var goal = intendedRoom(rooms, villain)
-  var move = moveTowardGoal(villain, rooms, goal)
-  villain.update('location', move)
+  var {move, action} = intendedAction(rooms, villain)
+
+  if (villain.get('location') == move) {
+    // action
+    console.log("ACT")
+    action()
+  }
+  else {
+    // MOVE to the room if not in it
+    console.log("MOVE", move)
+    var moveUpdate = moveTowardGoal(villain, rooms, move)
+    villain.update('location', moveUpdate)
+  }
+
+
 }
 
 function randomMove(villain) {
@@ -28,6 +40,7 @@ function randomMove(villain) {
 }
 
 function moveTowardGoal(villain, rooms, goal) {
+  if (!goal) throw new Error("Invalid Goal")
   var currentRoom = villain.get("location")
   var nextRoomId = dijkstra.nextRoomToDestination(rooms, currentRoom, goal)
   return function(l) {
@@ -35,17 +48,26 @@ function moveTowardGoal(villain, rooms, goal) {
   }
 }
 
-function intendedRoom(rooms, villain) {
+function intendedAction(rooms, villain) {
   var engineering = rooms.get('engineering')
-
-  var engine = engineering.getIn(Details.typeKeyPath(engineering, Details.ENGINE))
+  var engine = engineering.cursor(Details.typeKeyPath(engineering, Details.ENGINE))
 
   if (Details.isWorking(engine)) {
-    return "engineering"
+    return {move: "engineering", action: actionBreak(engine)}
   }
   else {
-    return "orbiterBridge"
+    return {move: "orbiterBridge", action: actionNothing}
   }
+}
+
+// I intend to break the detail :)
+function actionBreak(detail) {
+  return function() {
+    Details.breakIt(detail)
+  }
+}
+
+function actionNothing() {
 
 }
 

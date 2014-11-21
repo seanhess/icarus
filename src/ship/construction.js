@@ -222,7 +222,6 @@ var landerBridge = Room("landerBridge", "Lander Bridge",
     "There is a computer access terminal in the computer banks along the aft wall.",
     [
         Terminal({broken: false}),
-        Detail(ENGINE, "engine", {disabled: true, broken: false}),
         Detail("pile", "pile of rubble", {}),
     ]
 )

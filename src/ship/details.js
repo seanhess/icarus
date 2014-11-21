@@ -84,8 +84,18 @@ function isBroken(detail) {
   return detail.get(BROKEN)
 }
 
+function breakIt(detail) {
+  return modify(detail, exports.BROKEN, true)
+}
+
+function modify(detail, key, value) {
+  return detail.update('properties', (props) => props.set(key, value))
+}
+
 exports.equals      = equals
 exports.typeKeyPath = typeKeyPath
 exports.keyPath     = keyPath
 exports.isWorking   = isWorking
 exports.isBroken    = isBroken
+exports.breakIt     = breakIt
+exports.modify      = modify

@@ -2,7 +2,7 @@ var Immutable = require('immutable')
 var immstruct = require('immstruct')
 var Ship = require('../ship')
 var {curry} = require('lodash')
-var details = require('../ship/details')
+var Details = require('../ship/details')
 
 exports.initialState = function() {
   return Immutable.fromJS({
@@ -36,7 +36,7 @@ exports.lookAround = function() {
 
 exports.detailChange = function(key, value) {
   return function({detail}) {
-    detail.update('properties', (props) => props.set(key, value))
+    Details.modify(detail, key, value)
   }
 }
 
@@ -59,7 +59,7 @@ exports.playerDetail = function(game, player) {
   var detailId = player.get('detail')
   var room = Ship.roomById(game, player.get('room'))
   if (!detailId) return null
-  return room.getIn(details.keyPath(player.get('detail')))
+  return room.getIn(Details.keyPath(player.get('detail')))
 }
 
 exports.playerRoom = function(game, player) {
