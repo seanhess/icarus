@@ -18,7 +18,7 @@ var LOCKED = "locked"
 var orbiterStorage = Room("orbiterStorage", "Orbiter Storage",
     "This room is filled with everything a man could need during his months in space. "+
     "The shelves are stocked with food, clothing, toiletries, spare parts, and many other "+
-    "things stored in airtight containers without labels.  Why isn’t anything labeled?? "+ 
+    "things stored in airtight containers without labels.  Why isn&#8217;t anything labeled?? "+ 
     "On each end of the room, an airlock leads to another section of the orbiter. "+
     "At least the doors are labeled!  A ladder leads upward as well, toward the center.",
     []
@@ -41,7 +41,7 @@ var orbiterQuarters = Room("orbiterQuarters", "Orbiter Quarters",
 )
 
 var orbiterRecreation = Room("orbiterRecreation", "Orbiter Recreation",
-    "A treadmill, a stationary bike, a couch with a television, and a one-man ping-pong table - that’s about "+
+    "A treadmill, a stationary bike, a couch with a television, and a one-man ping-pong table - that&#8217;s about "+
     "all that they managed to cram into this recreation center. Doors lead from the room on either end, and along "+
     "one wall a ladder leads upward to a hatch in the ceiling.",
     []
@@ -158,7 +158,7 @@ var portCryo = Room("portCryo", "Port Cryo Room",
     "stand open, their former inhabitants gone. \n\n"+
 
     "Water drips softly from the dead tubes through the steel grate that makes up the floor into the space below.  (Dim "+
-    "light comes from the emergency lights spaced at wide intervals along the room’s ceiling). \n\n"+
+    "light comes from the emergency lights spaced at wide intervals along the room&#8217;s ceiling). \n\n"+
     "In addition to the cryo tubes, there are three doors in this room - one leading fore, another aft, and the third to "+
     "starboard from the center of the room.  At the fore end of the room, on the starboard side, there is a small personnel "+
     "elevator. \n\n"+
@@ -175,7 +175,7 @@ var starboardCryo = Room("starboardCryo", "Starboard Cryo Room",
     "their former inhabitants gone. \n\n"+
 
     "Water drips softly from the dead tubes through the steel grate that makes up the floor into the space below. "+
-    "(Dim light comes from the emergency lights spaced at wide intervals along the room’s ceiling).",
+    "(Dim light comes from the emergency lights spaced at wide intervals along the room&#8217;s ceiling).",
     []
 )
 
@@ -305,41 +305,6 @@ function Room(id, name, description, details) {
     }
 }
 
-
-
-
-
-
-// Details can be
-//  broken
-//  disabled
-//  we need a way to describe them differently depending on this stuff
-//  terminals can be unplugged
-//  data banks can be removed (find them and put them back)
-
-//  properties can be enabled or disabled
-//  they either contribute to the description or they don't
-//  change the properties and the description changes!
-
-
-// TYPES OF DETAILS
-// -- terminals
-//    pipes with blood on them
-//    tool: hydrospanner
-//    broken robot
-//    a lead pipe
-//    a knife
-//    a blaster
-//    data disks / banks / memory sticks
-//    motion sensors
-//    engine coolant valve
-//    "A terminal is glowing" -- special case!
-//    "A hyrdospanner with a cracked screen"
-
-// can you pick this thing up?
-// it depends on what it is. what happens when you click it?
-
-// Details
 
 function Terminal(name, properties) {
   return Detail(TERMINAL, name, properties)
