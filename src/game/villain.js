@@ -62,6 +62,7 @@ function moveTowardGoal(villain, rooms, goal) {
 
 function avoid(rooms, path) {
   // move to a random door, except the one towards the player
+  // he avoids you too effectively. We need some dead ends.
   var badDoor = path[1]
   var currentRoomId = path[0]
   var exits = Object.keys(rooms.getIn([currentRoomId, "connections"]).toObject())

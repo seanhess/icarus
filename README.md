@@ -51,7 +51,6 @@ SYSTEMS
 - [ ] door controls: gives access to open and close doors
 - [ ] navigation system: required
 
-
 - [ ] closets, tool boxes, junk piles, etc. 
 - [ ] randomize tool locations
 
