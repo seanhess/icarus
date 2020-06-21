@@ -2,11 +2,12 @@ var Immutable = require('immutable')
 var Cursor    = require('immutable/contrib/cursor')
 var immstruct = require('immstruct')
 
-var Player = require('./player')
-var Ship = require('../ship')
-var Events = require('./events')
+var Player  = require('./player')
+var Ship    = require('../ship')
+var Events  = require('./events')
 var Villain = require('./villain')
 var History = require('./history')
+var Systems = require('./systems')
 
 var csp = require("js-csp");
 
@@ -37,11 +38,12 @@ exports.showFeedback = function(message) {
 // this file is the glue, has references to all the others?
 function initialState() {
   return Immutable.Map({
-    player: Player.initialState(),
-    villain: Villain.initialState(),
-    rooms: Ship.rooms,
-    events: Events.initialState(),
-    feedback: "", 
+    player:    Player.initialState(),
+    villain:   Villain.initialState(),
+    rooms:     Ship.rooms,
+    events:    Events.initialState(),
+    systems:   Systems.initialState(),
+    feedback:  "",
   })
 }
 
@@ -78,12 +80,12 @@ function runState(state, f) {
 
 function tickCursors(state) {
   return {
-    player:  state.cursor('player'),
-    villain: state.cursor('villain'),
-    events:  state.cursor('events'),
-    detail:  state.cursor(detailKeyPath(state)),
-    room:    state.cursor(roomKeyPath(state)),
-    game:    state
+    player:   state.cursor('player'),
+    villain:  state.cursor('villain'),
+    events:   state.cursor('events'),
+    detail:   state.cursor(detailKeyPath(state)),
+    room:     state.cursor(roomKeyPath(state)),
+    game:     state
   }
 }
 

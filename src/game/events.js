@@ -10,7 +10,7 @@ exports.initialState = function() {
   return Immutable.Map({
     turn: 0,
     time: START_TIME,
-    distanceToSunDoom: 20,
+    distanceToSunDoom: 100,
     event: null,
     clue: null
   })

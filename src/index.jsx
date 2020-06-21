@@ -25,8 +25,8 @@ var App = component(function({terminal, game, history}) {
       player={game.cursor('player')}
       game={game}
     />
-    <pre>{debug('VILLAIN', game.get('villain'))} {debug('EVENTS', game.get('events'))}</pre>
   </div>
+    //<pre>{debug('VILLAIN', game.get('villain'))} {debug('EVENTS', game.get('events'))}</pre>
 })
 
 var RightPanel = component(function({terminal, player, game}) {

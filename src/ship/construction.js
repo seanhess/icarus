@@ -127,6 +127,7 @@ var cargoHold = Room("cargoHold", "Cargo Hold",
     "The center ladder continues to rise above the catwalk, leading to a hatch in the ceiling, with an identical hatch on "+ 
     "the floor at the foot of the ladder.",
     [
+        Detail(TOOLS, "set of tools", {collectable: true}),
     ]
 )
 
@@ -161,8 +162,8 @@ var portCryo = Room("portCryo", "Port Cryo Room",
 
     "There is also an old computer terminal access, opposite the center door.",
     [
-        Terminal({broken: true}),
-        Detail(TOOLS, "sonic screwdriver", {collectable: true}),
+        //Terminal({broken: true}),
+        //Detail(TOOLS, "sonic screwdriver", {collectable: true}),
     ]
 )
 
@@ -198,7 +199,9 @@ var landerMedical = Room("landerMedical", "Lander Medical",
 
     "There is a door that leads fore, and another that leads starboard.  In one corner of the room, there is also a ladder "+
     "leading down.",
-    []
+    [
+        Detail(WEAPON, "pistol", {weapon: 2, collectable: true}),
+    ]
 )
 
 var landerRecreation = Room("landerRecreation", "Lander Recreation",
@@ -223,8 +226,7 @@ var landerBridge = Room("landerBridge", "Lander Bridge",
     "There is a computer access terminal in the computer banks along the aft wall.",
     [
         Terminal({broken: false}),
-        Detail("pile", "pile of rubble", {}),
-        Detail(WEAPON, "pistol", {weapon: 2, collectable: true}),
+        //Detail("pile", "pile of rubble", {}),
     ]
 )
 

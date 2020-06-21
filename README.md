@@ -12,6 +12,9 @@ Open index.html in browser.
 - [x] "wait" command
 - [x] "back to"
 - [x] throw a weapon somewhere, if it's better you win
+- [ ] AI message: please enable sensors -> Message: Alert! We're heading towards the sun! Alert! Foreign object!
+
+RANDOM
 - [ ] satisfying description when you enable or fix something
 
 AI 
@@ -55,3 +58,25 @@ SYSTEMS
 - [ ] randomize tool locations
 
 - [ ] add a few dead ends in so you can corner him
+
+CONTENT
+- [ ] think of it like fiction: go through and actually write things
+- [ ] render the ship as a graph, somehow
+
+STORYLINE
+- [ ] introduction: you wake up.
+- [ ] explore the ship
+- [ ] play with the terminal
+- [ ] mission: enable main communication hub (internal sensors)
+- [ ] mission: enable life support
+- [ ] mission: enable AI external sensors?
+
+Stages
+  1. I am completely cut off. Please enable me in the main hub. Cut off from data banks. Complete reset!
+    [ ] login message. dialogue with it somehow?
+  1. External Sensors are damaged. Please fix!
+  2. Trajectory: We're headed towards the sun! Oh, and there is a foreign object.
+  2. I can't move: (engine starts out working, but nav system is disconnected)
+  3. something is sabotauging me: door controls?
+
+
