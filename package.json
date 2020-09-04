@@ -27,7 +27,7 @@
     "lodash": "^2.4.1",
     "moment": "^2.8.3",
     "omniscient": "^2.0.1",
-    "react": "^0.12.0"
+    "react": "^0.14.0"
   },
   "devDependencies": {
     "ast-types": "^0.6.5",
